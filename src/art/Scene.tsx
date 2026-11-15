@@ -277,7 +277,7 @@ export function Scene({ spec, aspect = 4 / 3, label }: { spec: SceneSpec; aspect
         return (
           <g key={i} transform={`translate(${a.x} ${y})`}>
             <ellipse cx={0} cy={2} rx={def.w * s} ry={6 * s} fill="#000" opacity={0.22} />
-            <g transform={`scale(${(a.flip ? -1 : 1) * s} ${s})`}>{def.draw(a.mood)}</g>
+            <g transform={`rotate(${a.rot ?? 0} 0 -50) scale(${(a.flip ? -1 : 1) * s} ${s})`}>{def.draw(a.mood)}</g>
           </g>
         );
       })}

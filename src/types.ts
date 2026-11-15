@@ -23,6 +23,7 @@ export interface Actor {
   s?: number; // scale
   flip?: boolean;
   mood?: 'happy' | 'sad' | 'angry' | 'scared' | 'smug';
+  rot?: number; // degrees, e.g. 180 for a figure hanging upside down
 }
 
 export interface SceneSpec {

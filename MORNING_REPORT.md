@@ -3,7 +3,7 @@
 ## What works (checked in a real browser)
 - `npm install && npm run dev` runs; production build passes; 13 unit tests pass (reader state, audio queue).
 - UI follows the supplied design: home (cover fan, shelves, Padho / Suno panels, Kahaniyan list, closing band, “continue” ticket), library (search, filters for language / genre / age / rights, favourites, continue card), title page (credits, licence, source, per-language read/listen links, favourite, offline pack), reader, listen player, sign-in, light/dark.
-- **4 titles readable and listenable** (8 panels each): Monkey and the Crocodile (en, hi, ta, mr), Banyan Deer (en, hi, bn), Birbal and the Crows (en, hi, gu), Tenali Rama and the Thieves (en, hi, te, kn).
+- **8 titles readable and listenable** (8 panels each): Monkey and the Crocodile (en, hi, ta, mr), Banyan Deer (en, hi, bn), Birbal and the Crows (en, hi, gu), Tenali Rama and the Thieves (en, hi, te, kn), The Lion and the Hare (en, hi, mr), The Golden Goose (en, hi, kn), Vikram and Betaal (en, hi, ml), The Blue Jackal (en, hi, pa). All ten content languages are now covered.
 - **14 “coming soon” shelves** with no publisher art or text.
 - Reader: page-flip with a peel animation, panel-by-panel camera zoom, vertical scroll; LTR/RTL; pinch, drag-pan, swipe, keyboard; position remembered.
 - Listen: browser voices; per-character pitch; active balloon highlighted; speed, panel skip, sleep timer, auto-advance, driving mode (big buttons, wake lock). Verified playing in Tamil with the Mac’s “Vani” voice; highlight followed the line.
@@ -13,7 +13,7 @@
 
 ## Placeholder or not done
 - **Translations are AI-written and unreviewed** (Hindi, Tamil, Marathi, Bengali, Gujarati, Telugu, Kannada). Get native speakers to check them.
-- **Content volume:** 4 titles, not a full catalog. No Panchatantra/Hitopadesha/Vikram–Betaal/epics yet. **StoryWeaver was not ingested** (needs per-story licence checks). Internet Archive / NDLI / Wikisource were not searched in depth.
+- **Content volume:** 8 titles, not a full catalog. No Hitopadesha, Kathasaritsagara or epic retellings yet. Malayalam and Punjabi voices are often missing in browsers, so those two will mostly read as text. **StoryWeaver was not ingested** (needs per-story licence checks). Internet Archive / NDLI / Wikisource were not searched in depth.
 - **Art** is procedural SVG: clean but simple. Real illustrators would lift it. Covers are the design’s abstract shapes.
 - **Sign-in is fake** (stores a name locally). **Moderation and submissions are browser-local** with no authentication — not safe to deploy as an admin tool. See `docs/BACKEND_STUB.md`.
 - **Voices:** quality and availability depend on the visitor’s device; many phones lack Bengali/Marathi/Gujarati voices. The UI warns when none is found.

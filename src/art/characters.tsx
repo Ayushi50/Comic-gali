@@ -136,6 +136,79 @@ export function Crow({ mood = 'smug' }: { mood?: Mood }) {
   );
 }
 
+
+export function Lion({ mood = 'happy' }: { mood?: Mood }) {
+  return (
+    <g>
+      <path d="M-44 -48 C-72 -60 -76 -86 -58 -92" fill="none" stroke="#c98b3c" strokeWidth={6} strokeLinecap="round" />
+      <circle cx={-58} cy={-92} r={8} fill="#8a4b1f" stroke={INK} strokeWidth={1.6} />
+      <ellipse cx={-4} cy={-48} rx={46} ry={26} fill="#d9a04c" stroke={INK} strokeWidth={2} />
+      {[-28, -10, 14, 30].map((x) => <rect key={x} x={x} y={-34} width={10} height={34} rx={4} fill="#d9a04c" stroke={INK} strokeWidth={1.6} />)}
+      <circle cx={42} cy={-78} r={34} fill="#9a4f1d" stroke={INK} strokeWidth={2} />
+      <circle cx={44} cy={-76} r={22} fill="#e8b45c" stroke={INK} strokeWidth={2} />
+      <circle cx={30} cy={-96} r={7} fill="#e8b45c" stroke={INK} strokeWidth={1.6} /><circle cx={58} cy={-96} r={7} fill="#e8b45c" stroke={INK} strokeWidth={1.6} />
+      <Eyes x={44} y={-82} gap={14} r={2.6} mood={mood === 'happy' ? 'smug' : mood} />
+      <path d="M38 -72 L50 -72 L44 -66 Z" fill={INK} />
+      <Mouth x={44} y={-62} mood={mood} w={14} />
+    </g>
+  );
+}
+
+export function Hare({ mood = 'happy' }: { mood?: Mood }) {
+  return (
+    <g>
+      <circle cx={-22} cy={-18} r={8} fill="#fff" stroke={INK} strokeWidth={1.6} />
+      <ellipse cx={-2} cy={-26} rx={24} ry={20} fill="#f4efe6" stroke={INK} strokeWidth={2} />
+      <ellipse cx={10} cy={-6} rx={14} ry={6} fill="#f4efe6" stroke={INK} strokeWidth={1.6} />
+      <ellipse cx={20} cy={-52} rx={14} ry={12} fill="#f4efe6" stroke={INK} strokeWidth={2} />
+      <ellipse cx={14} cy={-82} rx={5} ry={18} fill="#f4efe6" stroke={INK} strokeWidth={2} transform="rotate(-12 14 -82)" />
+      <ellipse cx={28} cy={-82} rx={5} ry={18} fill="#f4efe6" stroke={INK} strokeWidth={2} transform="rotate(10 28 -82)" />
+      <ellipse cx={14} cy={-82} rx={2} ry={12} fill="#f3b6bd" transform="rotate(-12 14 -82)" />
+      <Eyes x={22} y={-54} gap={9} r={2.2} mood={mood} />
+      <circle cx={31} cy={-48} r={2.4} fill="#e8788a" />
+      <Mouth x={26} y={-44} mood={mood} w={7} />
+    </g>
+  );
+}
+
+export function Goose({ mood = 'happy' }: { mood?: Mood }) {
+  return (
+    <g>
+      <path d="M-34 -30 L-52 -40 L-30 -20 Z" fill="#ffd34d" stroke={INK} strokeWidth={1.6} />
+      <ellipse cx={-4} cy={-30} rx={32} ry={22} fill="#ffe27a" stroke={INK} strokeWidth={2} />
+      <path d="M-24 -34 C-8 -50 14 -40 16 -26 C0 -18 -16 -22 -24 -34 Z" fill="#ffc21a" />
+      <path d="M20 -42 C30 -62 26 -76 30 -88" fill="none" stroke="#ffe27a" strokeWidth={11} strokeLinecap="round" />
+      <path d="M20 -42 C30 -62 26 -76 30 -88" fill="none" stroke={INK} strokeWidth={1.4} strokeLinecap="round" opacity={0.0} />
+      <circle cx={32} cy={-92} r={11} fill="#ffe27a" stroke={INK} strokeWidth={2} />
+      <path d="M41 -94 L56 -90 L41 -86 Z" fill="#e4432d" stroke={INK} strokeWidth={1.4} />
+      <circle cx={34} cy={-96} r={3.2} fill="#fff" stroke={INK} strokeWidth={1} /><circle cx={35} cy={-96} r={1.6} fill={INK} />
+      {mood === 'sad' && <path d="M28 -104 l10 -3" stroke={INK} strokeWidth={2} />}
+      <path d="M-8 -9 l-2 9 M8 -9 l2 9" stroke="#e4432d" strokeWidth={3} strokeLinecap="round" />
+    </g>
+  );
+}
+
+export function Jackal({ blue = false, mood = 'happy' }: { blue?: boolean; mood?: Mood }) {
+  const body = blue ? '#2f6fe0' : '#b98a55';
+  const belly = blue ? '#8fb8ff' : '#e6cfa6';
+  return (
+    <g>
+      <path d="M-44 -40 C-76 -44 -80 -70 -62 -80" fill="none" stroke={body} strokeWidth={9} strokeLinecap="round" />
+      <ellipse cx={-6} cy={-42} rx={42} ry={20} fill={body} stroke={INK} strokeWidth={2} />
+      <ellipse cx={-2} cy={-34} rx={30} ry={8} fill={belly} />
+      {[-26, -10, 12, 26].map((x) => <rect key={x} x={x} y={-32} width={7} height={32} rx={3} fill={body} stroke={INK} strokeWidth={1.6} />)}
+      <path d="M30 -52 C42 -70 44 -78 48 -84 L62 -80 C58 -70 56 -60 48 -48 Z" fill={body} stroke={INK} strokeWidth={2} />
+      <ellipse cx={58} cy={-86} rx={16} ry={12} fill={body} stroke={INK} strokeWidth={2} />
+      <path d="M66 -90 L92 -84 L68 -78 Z" fill={belly} stroke={INK} strokeWidth={1.8} />
+      <circle cx={92} cy={-84} r={3} fill={INK} />
+      <path d="M46 -94 L40 -116 L56 -98 Z M60 -96 L66 -118 L72 -96 Z" fill={body} stroke={INK} strokeWidth={1.8} />
+      <circle cx={58} cy={-90} r={3.6} fill="#fff" stroke={INK} strokeWidth={1.2} /><circle cx={59} cy={-90} r={1.8} fill={INK} />
+      {mood === 'angry' && <path d="M52 -98 l12 3" stroke={INK} strokeWidth={2.4} />}
+      {mood === 'happy' && <path d="M70 -76 q8 8 18 -2" fill="none" stroke={INK} strokeWidth={1.6} />}
+    </g>
+  );
+}
+
 interface HumanOpts {
   skin?: string;
   robe: string;
@@ -219,5 +292,14 @@ export const CHARACTERS: Record<string, CharDef> = {
   tenali: { draw: (m) => <Human robe="#f5a400" robe2="#e4432d" head="turban" headColor="#2b2d77" stache mood={m} skin="#b27346" />, w: 30 },
   wife: { draw: (m) => <Human robe="#e4432d" robe2="#f5a400" head="bun" mood={m} dress skin="#b27346" />, w: 30 },
   thief: { draw: (m) => <Human robe="#3b3a4a" robe2="#6b6a7e" head="cap" headColor="#1b1530" stache mood={m} accessory="bag" skin="#a86a40" />, w: 30 },
+  lion: { draw: (m) => <Lion mood={m} />, w: 60 },
+  hare: { draw: (m) => <Hare mood={m} />, w: 30 },
+  goose: { draw: (m) => <Goose mood={m} />, w: 40 },
+  jackal: { draw: (m) => <Jackal mood={m} />, w: 60 },
+  bluejackal: { draw: (m) => <Jackal blue mood={m} />, w: 60 },
+  vikram: { draw: (m) => <Human robe="#7a1fa2" robe2="#f5a400" head="crown" stache mood={m} skin="#c98b5a" />, w: 30 },
+  betaal: { draw: (m) => <Human robe="#5a6a6a" robe2="#3a4646" head="none" mood={m} skin="#9bb3a8" />, w: 30 },
+  poorwoman: { draw: (m) => <Human robe="#8a5a2b" robe2="#c98b3c" head="bun" mood={m} dress skin="#a86a40" />, w: 30 },
+  girl: { draw: (m) => <Human robe="#f06292" robe2="#f5a400" head="bun" mood={m} dress skin="#b27346" scale={0.72} />, w: 22 },
   thief2: { draw: (m) => <Human robe="#4a2f2f" robe2="#7a5a5a" head="turban" headColor="#555" mood={m} accessory="bucket" skin="#9a6238" scale={0.95} />, w: 30 },
 };

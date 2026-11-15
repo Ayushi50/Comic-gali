@@ -6,7 +6,7 @@ Made autonomously; change any of them.
 2. **Stack.** Vite + React + TypeScript, plain CSS (the design’s tokens as CSS variables), React Router, Vitest. No UI library. No backend.
 3. **Name.** Kept “Comic Gali” — it fits the design and the brief.
 4. **Original art only.** Page art is procedural SVG: characters and scenes in `src/art/` were invented for this project. Covers are the zip’s abstract CSS covers. No third-party character, logo or cover appears.
-5. **Content is original retellings** of folk tales and Jatakas, not copies of any printed edition (see SOURCES.md). Only four titles, eight panels each, to keep quality checkable.
+5. **Content is original retellings** of folk tales and Jatakas, not copies of any printed edition (see SOURCES.md). Eight titles, eight panels each, to keep quality checkable.
 6. **Story format.** Each panel carries `lines[]` with `kind` (narration / speech / thought / sfx), `speaker`, per-language `text`, and an optional per-language `audio` URL. When a recording exists, it plays instead of text-to-speech. Sound-effect lines are visual only.
 7. **Page layout.** Pages are 800×1120 design units with four panels in one of three layouts. The same markup serves page-flip (fit the page), panel-by-panel (camera zoom to a panel rectangle) and vertical scroll (panels stacked). Right-to-left mirrors panel positions and swaps arrow keys and swipe direction.
 8. **Voices.** Browser Web Speech only. Characters get pitch/rate and a gender hint; a voice is chosen from what the browser offers for that language. If none exists, the UI says so. Tamil was confirmed on this Mac (“Vani”); other languages depend on the device.
