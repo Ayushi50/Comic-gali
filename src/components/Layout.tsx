@@ -72,6 +72,7 @@ export function Layout() {
           <Link to="/submit">{t('foot.submit')}</Link>
         </nav>
         <span className="tag">{t('foot.tag')}</span>
+        {t('mt.note') && <span className="tiny" role="note" lang="hi" style={{ display: 'block', marginTop: 8 }}>{t('mt.note')}</span>}
       </footer>
     </>
   );

@@ -43,21 +43,21 @@ export function SignIn() {
             <div><h1 className="h2 sm">{t('si.h')}</h1><p className="muted" style={{ margin: '8px 0 0' }}>{t('si.sub')}</p></div>
             {sp.get('error') && <div role="alert" style={{ color: 'var(--c2)', fontWeight: 600 }}>That sign-in link did not work or has expired. Ask for a new one.</div>}
             {cfg?.magicLink && <>
-              <div><label className="lbl" htmlFor="em">Email</label><input id="em" className="inp" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" /></div>
-              <button className="pri dhak" type="submit" disabled={busy}>Email me a sign-in link</button>
+              <div><label className="lbl" htmlFor="em">{t('si.email')}</label><input id="em" className="inp" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" /></div>
+              <button className="pri dhak" type="submit" disabled={busy}>{t('si.magic')}</button>
             </>}
-            {cfg?.google && <a className="sec dhak" style={{ height: 48, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }} href={apiUrl('/api/auth/google')}>Continue with Google</a>}
+            {cfg?.google && <a className="sec dhak" style={{ height: 48, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }} href={apiUrl('/api/auth/google')}>{t('si.google')}</a>}
             {cfg && !cfg.magicLink && !cfg.google && <p className="help">Sign-in is not set up on this server yet.</p>}
             {msg && <div role="status" className="help">{msg}</div>}
-            <Link to="/library" className="lnk ul">Continue without signing in</Link>
-            <p className="help">Signing in syncs your favourites and reading position across devices. Reading and listening never need an account.</p>
+            <Link to="/library" className="lnk ul">{t('si.guest')}</Link>
+            <p className="help">{t('si.sync')}</p>
           </form>
         ) : (
         <form onSubmit={submit}>
           <div><h1 className="h2 sm">{t('si.h')}</h1><p className="muted" style={{ margin: '8px 0 0' }}>{t('si.sub')}</p></div>
           <div><label className="lbl" htmlFor="nm">{t('si.name')}</label><input id="nm" className="inp" value={name} onChange={(e) => setName(e.target.value)} autoComplete="given-name" maxLength={30} /></div>
           <button className="pri dhak" type="submit">{t('si.go')}</button>
-          <Link to="/library" className="lnk ul">Continue without signing in</Link>
+          <Link to="/library" className="lnk ul">{t('si.guest')}</Link>
           <p className="help">{t('si.note')}</p>
         </form>
         )}
