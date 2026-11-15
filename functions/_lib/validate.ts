@@ -1,7 +1,7 @@
 import type { Lang } from '../../src/types';
 export const LANG_CODES = ['en', 'hi', 'ta', 'te', 'bn', 'mr', 'gu', 'kn', 'ml', 'pa'] as const;
 export const LICENSES = ['CC BY 4.0', 'CC BY-SA 4.0', 'CC0', 'Permission to host'] as const;
-export const LIMITS = { maxPages: 12, maxPageBytes: 2_500_000, maxTotalBytes: 16_000_000, title: 120, name: 80, panelText: 8000, reason: 1000, recordingBytes: 3_000_000 };
+export const LIMITS = { maxPages: 12, maxPageBytes: 1_400_000, maxTotalBytes: 16_000_000, title: 120, name: 80, panelText: 8000, reason: 1000, recordingBytes: 1_400_000 };
 
 /** Strip control characters and angle brackets, collapse whitespace, cap length. Output is text, never HTML. */
 export function clean(s: unknown, max: number, multiline = false): string {

@@ -13,7 +13,7 @@ export interface BucketLike {
 }
 export interface Env {
   DB: D1Like;
-  BUCKET: BucketLike;
+  BUCKET?: BucketLike;              // optional R2 bucket; without it files are stored in D1 (card-free default)
   SITE_ORIGIN: string;              // e.g. https://comicgali.pages.dev  (CORS + links in emails)
   SESSION_SECRET: string;           // >= 32 random chars
   ADMIN_EMAIL?: string;             // first admin account
@@ -34,3 +34,5 @@ export async function audit(env: Env, actor: string | null, action: string, targ
   await env.DB.prepare('INSERT INTO audit_log (actor_id, action, target, detail, at) VALUES (?,?,?,?,?)')
     .bind(actor, action, target ?? null, detail == null ? null : JSON.stringify(detail), now()).run();
 }
+import { D1Bucket } from './d1bucket';
+export const bucketOf = (env: Env): BucketLike => env.BUCKET ?? new D1Bucket(env.DB);

@@ -30,7 +30,7 @@ Free-tier facts below were read from the official pages on **2026-11-15** (pages
 | Cloudflare Pages (static) | static requests free and unlimited; 500 builds/month (third-party figure, verify) | service terms; commercial OK | developers.cloudflare.com/pages |
 | Pages Functions | share Workers Free: 100,000 requests/day, **10 ms CPU/request**, 50 subrequests, 100 MB body | commercial OK | developers.cloudflare.com/workers/platform/limits, /pages/functions/pricing |
 | D1 | 5 M rows read/day, 100 k rows written/day, 5 GB total, 500 MB/db, 10 dbs; queries fail over the daily limit until 00:00 UTC | commercial OK | developers.cloudflare.com/d1/platform/pricing, /limits |
-| R2 | 10 GB-month, 1 M Class A, 10 M Class B ops/month, free egress | commercial OK | developers.cloudflare.com/r2/pricing |
+| R2 (**not used**: enabling it asked for a payment card, 2026-11-15) | 10 GB-month, 1 M Class A, 10 M Class B ops/month, free egress | commercial OK | developers.cloudflare.com/r2/pricing |
 | Turnstile | free, unlimited challenges; 20 widgets, 10 hostnames/widget | commercial OK | developers.cloudflare.com/turnstile/plans |
 | Resend | 3,000 mails/month and 100/day (search snippets of resend.com docs; official page not opened) | commercial OK; verify card/domain rules at signup | resend.com/docs/knowledge-base/resend-sending-limits |
 | Google OAuth | no billing needed for basic sign-in (not re-verified) | Google API terms | console.cloud.google.com |
@@ -50,3 +50,4 @@ Free-tier facts below were read from the official pages on **2026-11-15** (pages
 26. **Existing free recordings (B1):** found and listed in `SOURCES.md`, **none ingested** (no matching texts that I could align; licences of some read-alongs are NC/ND). The `audioWhole` format and player support exist for when one is added.
 27. **UI strings:** Hindi was missing 24+ keys; they are filled and the footer shows a machine-translation notice in Hindi UI. Other UI languages do not exist (the UI offers Hinglish, English, Hindi); all ten content languages still work.
 28. **Layout fixes:** panel art is drawn in the space below the estimated balloon stack, so balloons no longer hide characters; the reader top bar wraps below 560 px instead of scrolling sideways.
+29. **No R2.** Cloudflare asked for a card to enable R2, so uploads (comic pages, human recordings) are stored in D1 (`blobs` table, base64, ≤ 1.4 MB each; D1 free: 5 GB, 100k rows written/day). The code uses an R2 `BUCKET` binding automatically if one is ever added. Trade-offs: a smaller per-page cap and no CDN caching beyond HTTP cache headers.

@@ -1,4 +1,4 @@
-import { audit, now, uid, type Env } from './db';
+import { audit, bucketOf, now, uid, type Env } from './db';
 import { randomToken, sha256, sign, signUrl, unsign, verifyUrl } from './crypto';
 import { sendMail, tpl, type Sender } from './email';
 import { HttpError, assertSameOrigin, clientIp, cookie, corsHeaders, json, parseCookies, SECURITY_HEADERS } from './http';
@@ -158,7 +158,7 @@ route('GET', '/api/stories/([a-z0-9-]+)', async ({ env, m }) => {
 route('GET', '/api/media/(pub|sub|rec)/(.+)', async ({ env, url, m }) => {
   const key = `${m[1]}/${m[2]}`;
   if (m[1] === 'sub' && !(await verifyUrl(env.SESSION_SECRET, url.pathname, url.searchParams.get('exp'), url.searchParams.get('sig')))) throw new HttpError(403, 'Link expired');
-  const o = await env.BUCKET.get(key); if (!o) throw new HttpError(404, 'Not found');
+  const o = await bucketOf(env).get(key); if (!o) throw new HttpError(404, 'Not found');
   return new Response(o.body as BodyInit, { headers: { 'content-type': o.httpMetadata?.contentType ?? 'application/octet-stream', 'cache-control': m[1] === 'sub' ? 'private, max-age=300' : 'public, max-age=31536000, immutable', ...SECURITY_HEADERS, 'content-security-policy': "default-src 'none'; sandbox" } });
 });
 
@@ -184,7 +184,7 @@ route('POST', '/api/submissions', async ({ req, env, d, user }) => {
     .bind(id, user?.id ?? null, v.v.title, v.v.creator, v.v.email, v.v.lang, v.v.license, v.v.panelText, 'pending', t).run();
   for (const [i, f] of loaded.entries()) {
     const key = `sub/${id}/${i + 1}.${pv.kinds[i].ext}`;
-    await env.BUCKET.put(key, f.bytes, { httpMetadata: { contentType: pv.kinds[i].mime } });
+    await bucketOf(env).put(key, f.bytes, { httpMetadata: { contentType: pv.kinds[i].mime } });
     await env.DB.prepare('INSERT INTO submission_pages (id,submission_id,idx,r2_key,mime,bytes) VALUES (?,?,?,?,?,?)').bind(uid(), id, i, key, pv.kinds[i].mime, f.size).run();
   }
   await env.DB.prepare('INSERT INTO consents (id,submission_id,user_id,text,at,ip_hash) VALUES (?,?,?,?,?,?)').bind(uid(), id, user?.id ?? null, v.v.consentText || 'Creator consent (default text)', t, ih).run();
@@ -226,9 +226,9 @@ route('POST', '/api/submissions/([0-9a-f-]{36})/(approve|reject)', async ({ req,
   const titleId = `${slugify(s.title)}-${s.id.slice(0, 4)}`;
   const urls: string[] = [];
   for (const [i, p] of pg.results.entries()) {
-    const src = await env.BUCKET.get(p.r2_key); if (!src) throw new HttpError(500, 'Missing page file');
+    const src = await bucketOf(env).get(p.r2_key); if (!src) throw new HttpError(500, 'Missing page file');
     const key = `pub/${titleId}/${i + 1}.${p.r2_key.split('.').pop()}`;
-    await env.BUCKET.put(key, new Uint8Array(await src.arrayBuffer()), { httpMetadata: { contentType: p.mime } });
+    await bucketOf(env).put(key, new Uint8Array(await src.arrayBuffer()), { httpMetadata: { contentType: p.mime } });
     urls.push(`/api/media/${key}`);
   }
   const { story, item } = buildPublication(s, titleId, urls, day());
@@ -299,7 +299,7 @@ route('POST', '/api/recordings', async ({ req, env, d, user }) => {
   const bytes = new Uint8Array(await file.arrayBuffer()); const kind = sniffAudio(bytes);
   if (!kind) throw new HttpError(415, 'Use an MP3, M4A, OGG or WebM recording.');
   const id = uid(); const key = `rec/${titleId}/${id}.${kind.ext}`;
-  await env.BUCKET.put(key, bytes, { httpMetadata: { contentType: kind.mime } });
+  await bucketOf(env).put(key, bytes, { httpMetadata: { contentType: kind.mime } });
   await env.DB.prepare('DELETE FROM recordings WHERE title_id=? AND lang=? AND line_id IS ?').bind(titleId, lang, lineId).run();
   await env.DB.prepare('INSERT INTO recordings (id,title_id,line_id,lang,r2_key,uploader_id,at) VALUES (?,?,?,?,?,?,?)').bind(id, titleId, lineId, lang, key, u.id, d.now()).run();
   await audit(env, u.id, 'recording.upload', titleId, { lineId, lang });

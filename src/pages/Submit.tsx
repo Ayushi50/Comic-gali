@@ -25,7 +25,7 @@ export default function Submit() {
     e.preventDefault(); setErr('');
     if (!files.length) { setErr('Add at least one page image.'); return; }
     if (files.length > 12) { setErr('At most 12 pages.'); return; }
-    if (files.some((x) => !/^image\/(png|jpeg|webp)$/.test(x.type) || x.size > 2.5e6)) { setErr('Pages must be PNG, JPEG or WebP images under 2.5 MB each.'); return; }
+    if (files.some((x) => !/^image\/(png|jpeg|webp)$/.test(x.type) || x.size > 1.4e6)) { setErr('Pages must be PNG, JPEG or WebP images under 1.4 MB each.'); return; }
     setBusy(true);
     try {
       if (API_ON) await submitToApi({ ...f, consent: String(f.consent), consentText: CONSENT }, files, ts);
@@ -46,7 +46,7 @@ export default function Submit() {
           <div><label className="lbl" htmlFor="s3">Email (not shown publicly)</label><input id="s3" className="inp" type="email" required value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} /></div>
           <div><label className="lbl" htmlFor="s4">Language</label><select id="s4" className="inp" value={f.lang} onChange={(e) => setF({ ...f, lang: e.target.value })}>{LANGS.map((l) => <option key={l} value={l}>{LANG_NAMES[l]}</option>)}</select></div>
         </div>
-        <div><label className="lbl" htmlFor="s5">Pages (images, in order)</label><input id="s5" className="inp" style={{ paddingTop: 14 }} type="file" accept="image/*" multiple onChange={(e) => setFiles([...(e.target.files ?? [])])} /><div className="help">{files.length} file(s) chosen. PNG, JPEG or WebP, up to 2.5 MB each, 12 pages at most.</div></div>
+        <div><label className="lbl" htmlFor="s5">Pages (images, in order)</label><input id="s5" className="inp" style={{ paddingTop: 14 }} type="file" accept="image/*" multiple onChange={(e) => setFiles([...(e.target.files ?? [])])} /><div className="help">{files.length} file(s) chosen. PNG, JPEG or WebP, up to 1.4 MB each, 12 pages at most.</div></div>
         <div><label className="lbl" htmlFor="s6">Panel text (optional, makes it listenable)</label><textarea id="s6" className="inp" value={f.panelText} onChange={(e) => setF({ ...f, panelText: e.target.value })} placeholder={'Page 1, panel 1\nNarrator: One evening in the lane…\nRiya: Let’s fly kites!'} /><div className="help">One line per balloon as “Speaker: text”. Leave a blank line between panels.</div></div>
         <div><label className="lbl" htmlFor="s7">Licence</label><select id="s7" className="inp" value={f.license} onChange={(e) => setF({ ...f, license: e.target.value })}>{LICENSES.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select></div>
         <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}><input type="checkbox" required checked={f.consent} onChange={(e) => setF({ ...f, consent: e.target.checked })} style={{ marginTop: 4 }} /><span>{CONSENT}</span></label>

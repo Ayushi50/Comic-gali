@@ -2,7 +2,7 @@
 
 Optional. With no backend the site runs fully static (`npm run build` → `dist/`) exactly as before. Setting `VITE_API=1` at build time turns on: sign-in, account sync, creator submissions, real moderation, takedown form, human-recording overrides and API-published titles.
 
-**Stack:** Cloudflare Pages (hosting) + Pages Functions (`functions/`) + D1 (SQLite, `migrations/`) + R2 (uploads) + Turnstile (anti-spam) + Resend (email). Everything is free and none of it needs a credit card on the plans used here (verify at signup; see `DECISIONS.md` for limits and the date they were read).
+**Stack:** Cloudflare Pages (hosting) + Pages Functions (`functions/`) + D1 (SQLite, `migrations/`; **also stores uploads**, because enabling R2 asks for a payment card) + Turnstile (anti-spam) + Resend (email). R2 is used automatically if you add a `BUCKET` binding later. Everything is free and none of it needs a credit card on the plans used here (verify at signup; see `DECISIONS.md` for limits and the date they were read).
 
 ## Layout
 
@@ -23,7 +23,6 @@ D1 has no row-level security; every access rule lives in `functions/_lib/perms.t
 npm install
 npx wrangler login
 npx wrangler d1 create comic-gali              # copy database_id into wrangler.toml
-npx wrangler r2 bucket create comic-gali-files
 npx wrangler d1 migrations apply comic-gali --remote
 npx wrangler pages project create comic-gali --production-branch main
 ```
@@ -67,7 +66,7 @@ Local: copy `.dev.vars.example` → `.dev.vars`, then `npx wrangler d1 migration
 ## Flows
 
 - **Sign in:** `POST /api/auth/magic` → emailed single-use 15-minute link → `/api/auth/verify` sets the session cookie. Google: `/api/auth/google`. "Continue without signing in" always works. On first sign-in local favourites/positions are merged into the account (`/api/me/sync`, newest position wins) and kept in sync afterwards.
-- **Submit:** `POST /api/submissions` (multipart): Turnstile → per-IP limit (5/h) → daily cap → field + page validation (≤ 12 pages, ≤ 2.5 MB each, ≤ 16 MB total, PNG/JPEG/WebP by magic bytes) → files to R2 `sub/…`, row `pending`, consent row (text, time, salted IP hash), receipt email.
+- **Submit:** `POST /api/submissions` (multipart): Turnstile → per-IP limit (5/h) → daily cap → field + page validation (≤ 12 pages, ≤ 1.4 MB each (D1 row limit), ≤ 16 MB total, PNG/JPEG/WebP by magic bytes) → files to storage `sub/…` (D1 `blobs`), row `pending`, consent row (text, time, salted IP hash), receipt email.
 - **Moderate:** `/moderation` (moderator/admin only, enforced server-side). Preview via 10-minute signed URLs. **Approve** copies pages to public `pub/…`, builds the Story JSON (from the "Speaker: text" panel text) and a catalog entry with `rights: "creator_submitted"` and the creator's licence, status `published`, emails the creator. **Reject** needs a reason and emails it. Everything is in `audit_log`.
 - **Takedown:** `POST /api/takedown` stores the request, emails `TAKEDOWN_EMAIL` and the requester. A moderator presses "Unpublish title and close" (one action; static catalog titles must also be removed from `content-src/` and redeployed, the UI says so).
 - **Human recordings:** moderators (any title) and creators (own titles) upload per-line recordings to R2; the player prefers them over generated audio.

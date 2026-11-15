@@ -159,3 +159,18 @@ describe('recordings', () => {
     expect(anon.status).toBe(401);
   });
 });
+
+describe('card-free storage (files in D1, no R2)', () => {
+  it('runs submit → approve → public page using only D1', async () => {
+    delete env.BUCKET;
+    const { id } = await (await call('/api/submissions', { method: 'POST', body: submitForm() })).json();
+    const mod = await login('boss@cg.test');
+    const { titleId } = await (await post(`/api/submissions/${id}/approve`, {}, mod)).json();
+    const story = await (await call(`/api/stories/${titleId}`)).json();
+    const img = await call(story.imagePages[0]);
+    expect(img.status).toBe(200); expect(img.headers.get('content-type')).toBe('image/png');
+    expect(new Uint8Array(await img.arrayBuffer())).toEqual(png);
+    const big = submitForm(); big.delete('pages'); big.append('pages', new File([new Uint8Array(1_500_000).fill(1).map((_, i) => (i < 8 ? png[i] : 1))], 'b.png'));
+    expect((await call('/api/submissions', { method: 'POST', body: big, ip: '7.7.7.7' })).status).toBe(413);
+  });
+});

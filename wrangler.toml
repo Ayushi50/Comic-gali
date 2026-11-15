@@ -6,12 +6,11 @@ compatibility_date = "2026-11-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "comic-gali"
-database_id = "REPLACE_WITH_D1_ID"     # wrangler d1 create comic-gali
+database_id = "ada7dfc7-c3c4-42b1-9a08-5317792bf838"     # wrangler d1 create comic-gali
 migrations_dir = "migrations"
 
-[[r2_buckets]]
-binding = "BUCKET"
-bucket_name = "comic-gali-files"       # wrangler r2 bucket create comic-gali-files
+# R2 is not used: enabling it requires a payment card. Uploads are stored in D1 (table `blobs`).
+# To use R2 later, add [[r2_buckets]] binding = "BUCKET"; the code prefers it when present.
 
 # Non-secret vars go here; secrets via `wrangler pages secret put NAME`.
 [vars]
