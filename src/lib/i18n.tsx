@@ -43,7 +43,7 @@ const hl: Dict = {
   'ls.play': 'Play', 'ls.pause': 'Pause', 'ls.speed': 'Raftaar', 'ls.sleep': 'Sleep timer', 'ls.off': 'Band', 'ls.min': 'min', 'ls.drive': 'Driving mode', 'ls.exit': 'Band karo',
   'ls.auto': 'Auto-advance', 'ls.novoice': 'Is browser mein is bhasha ki awaaz nahi mili. Text padh sakte ho; doosre browser ya device par try karo.',
   'ls.asread': 'Comic ki tarah padho →', 'ls.next': 'Aage suno', 'ls.nospeech': 'Is browser mein speech synthesis nahi hai.',
-  'si.h': 'Login', 'si.sub': 'Apni library aur bookmarks wapas pao.', 'si.name': 'Naam', 'si.go': 'Login', 'si.note': 'Abhi account ka backend nahi hai. Aapka naam sirf is device par save hota hai.', 'si.tag': 'Kahaniyan intezaar kar rahi hain.',
+  'si.h': 'Login', 'si.sub': 'Apni library aur bookmarks wapas pao.', 'si.name': 'Naam', 'si.go': 'Start It', 'si.note': 'Abhi account ka backend nahi hai. Aapka naam sirf is device par save hota hai.', 'si.tag': 'Kahaniyan intezaar kar rahi hain.',
   'sub.h': 'Apni kahani bhejo', 'takedown.h': 'Takedown request', 'sources.h': 'Sources aur licence',
   'nf': 'Yeh page nahi mila.', 'loading': 'Khul raha hai…',
 };
@@ -71,7 +71,7 @@ const en: Dict = {
   'ls.play': 'Play', 'ls.pause': 'Pause', 'ls.speed': 'Speed', 'ls.sleep': 'Sleep timer', 'ls.off': 'Off', 'ls.min': 'min', 'ls.drive': 'Driving mode', 'ls.exit': 'Close',
   'ls.auto': 'Auto-advance', 'ls.novoice': 'No voice for this language was found in this browser. You can still read the text; try another browser or device.',
   'ls.asread': 'Read it as a comic →', 'ls.next': 'Listen next', 'ls.nospeech': 'This browser has no speech synthesis.',
-  'si.h': 'Login', 'si.sub': 'Get your library and bookmarks back.', 'si.name': 'Name', 'si.go': 'Login', 'si.note': 'There is no account backend yet. Your name is saved only on this device.', 'si.tag': 'The stories are waiting.',
+  'si.h': 'Login', 'si.sub': 'Get your library and bookmarks back.', 'si.name': 'Name', 'si.go': 'Start It', 'si.note': 'There is no account backend yet. Your name is saved only on this device.', 'si.tag': 'The stories are waiting.',
   'sub.h': 'Submit your work', 'takedown.h': 'Takedown request', 'sources.h': 'Sources and licences',
   'nf': 'That page does not exist.', 'loading': 'Loading…',
 };
@@ -94,7 +94,7 @@ const hi: Dict = {
   'rd.flip': 'पन्ना', 'rd.panel': 'पैनल', 'rd.scroll': 'स्क्रॉल', 'rd.back': 'वापस', 'rd.prev': 'पिछला', 'rd.next': 'अगला', 'rd.lang': 'भाषा',
   'ls.play': 'चलाओ', 'ls.pause': 'रोको', 'ls.speed': 'रफ़्तार', 'ls.sleep': 'स्लीप टाइमर', 'ls.off': 'बंद', 'ls.drive': 'ड्राइविंग मोड', 'ls.exit': 'बंद करो',
   'ls.asread': 'कॉमिक की तरह पढ़ो →', 'ls.next': 'आगे सुनो',
-  'si.h': 'लॉगिन', 'si.sub': 'अपनी लाइब्रेरी और बुकमार्क वापस पाओ।', 'si.name': 'नाम', 'si.go': 'लॉगिन', 'si.tag': 'कहानियाँ इंतज़ार कर रही हैं।',
+  'si.h': 'लॉगिन', 'si.sub': 'अपनी लाइब्रेरी और बुकमार्क वापस पाओ।', 'si.name': 'नाम', 'si.go': 'शुरू करो', 'si.tag': 'कहानियाँ इंतज़ार कर रही हैं।',
   'nf': 'यह पन्ना नहीं मिला।', 'loading': 'खुल रहा है…',
 };
 const DICTS: Record<UiLang, Dict> = { hl, en, hi };
