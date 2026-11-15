@@ -1,0 +1,683 @@
+{
+ "version": 1,
+ "updated": "2026-11-15",
+ "items": [
+  {
+   "id": "monkey-crocodile",
+   "title": {
+    "en": "The Monkey and the Crocodile",
+    "hi": "बंदर और मगरमच्छ",
+    "ta": "குரங்கும் முதலையும்",
+    "mr": "माकड आणि मगर"
+   },
+   "blurb": {
+    "en": "A clever monkey outwits a crocodile who wants his heart.",
+    "hi": "एक चतुर बंदर उस मगरमच्छ को मात देता है जो उसका दिल खाना चाहता है।"
+   },
+   "series": "Jataka Tales",
+   "rights": "public_domain",
+   "langs": [
+    "en",
+    "hi",
+    "ta",
+    "mr"
+   ],
+   "genres": [
+    "folk",
+    "animals",
+    "wit"
+   ],
+   "age": "all",
+   "readMinutes": 4,
+   "palette": [
+    "#0e8c7f",
+    "#f5a400"
+   ],
+   "cover": {
+    "bg": "riverbank",
+    "actors": [
+     {
+      "c": "monkey",
+      "x": 120,
+      "y": 160,
+      "s": 1
+     },
+     {
+      "c": "croc",
+      "x": 290,
+      "y": 240,
+      "s": 0.7
+     }
+    ]
+   },
+   "credits": [
+    {
+     "author": "Traditional Jataka tale (c. 3rd c. BCE onward)",
+     "role": "Story"
+    },
+    {
+     "author": "Comic Gali",
+     "role": "Original retelling, translation and artwork",
+     "note": "Text and art released under CC BY 4.0"
+    }
+   ],
+   "license": {
+    "name": "Story: public domain · Retelling & art: CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceName": "Project Gutenberg #62514 — Jataka Tales (E. C. Babbitt, 1912), story I; plot reference only",
+   "sourceUrl": "https://www.gutenberg.org/ebooks/62514",
+   "status": "available",
+   "verifiedOn": "2026-11-15",
+   "shelf": "Folk Tales & Wit"
+  },
+  {
+   "id": "banyan-deer",
+   "title": {
+    "en": "The Banyan Deer",
+    "hi": "वट-मृग",
+    "bn": "বট-হরিণ"
+   },
+   "blurb": {
+    "en": "A golden deer king offers his own life for a mother and her fawn.",
+    "hi": "सुनहरा हिरन राजा एक माँ और उसके बच्चे के लिए अपनी जान देने चलता है।"
+   },
+   "series": "Jataka Tales",
+   "rights": "public_domain",
+   "langs": [
+    "en",
+    "hi",
+    "bn"
+   ],
+   "genres": [
+    "folk",
+    "animals",
+    "moral"
+   ],
+   "age": "all",
+   "readMinutes": 5,
+   "palette": [
+    "#e4432d",
+    "#2b2d77"
+   ],
+   "cover": {
+    "bg": "forest",
+    "actors": [
+     {
+      "c": "deerking",
+      "x": 200,
+      "y": 245,
+      "s": 1.1
+     },
+     {
+      "c": "fawn",
+      "x": 310,
+      "y": 248,
+      "s": 1
+     }
+    ]
+   },
+   "credits": [
+    {
+     "author": "Traditional Jataka tale",
+     "role": "Story"
+    },
+    {
+     "author": "Comic Gali",
+     "role": "Original retelling, translation and artwork",
+     "note": "CC BY 4.0"
+    }
+   ],
+   "license": {
+    "name": "Story: public domain · Retelling & art: CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceName": "Project Gutenberg #62514 — Jataka Tales (E. C. Babbitt, 1912), story XII; plot reference only",
+   "sourceUrl": "https://www.gutenberg.org/ebooks/62514",
+   "status": "available",
+   "verifiedOn": "2026-11-15",
+   "shelf": "Folk Tales & Wit"
+  },
+  {
+   "id": "akbar-birbal-crows",
+   "title": {
+    "en": "Birbal and the Crows",
+    "hi": "बीरबल और कौए",
+    "gu": "બીરબલ અને કાગડા"
+   },
+   "blurb": {
+    "en": "How many crows live in the city? Birbal has an answer nobody can disprove.",
+    "hi": "शहर में कितने कौए हैं? बीरबल के पास ऐसा उत्तर है जिसे कोई ग़लत नहीं कर सकता।"
+   },
+   "series": "Akbar–Birbal",
+   "rights": "public_domain",
+   "langs": [
+    "en",
+    "hi",
+    "gu"
+   ],
+   "genres": [
+    "folk",
+    "humour",
+    "wit"
+   ],
+   "age": "all",
+   "readMinutes": 4,
+   "palette": [
+    "#7a1fa2",
+    "#f5a400"
+   ],
+   "cover": {
+    "bg": "palace",
+    "actors": [
+     {
+      "c": "akbar",
+      "x": 130,
+      "y": 250,
+      "s": 1.1
+     },
+     {
+      "c": "birbal",
+      "x": 270,
+      "y": 250,
+      "s": 1.05,
+      "flip": true
+     }
+    ]
+   },
+   "credits": [
+    {
+     "author": "Oral folk tradition (Mughal-era, 16th c. onward)",
+     "role": "Story"
+    },
+    {
+     "author": "Comic Gali",
+     "role": "Original retelling, translation and artwork",
+     "note": "CC BY 4.0"
+    }
+   ],
+   "license": {
+    "name": "Story: traditional folk tale · Retelling & art: CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceName": "Oral tradition; no copyrighted text used. Retold from common knowledge of the tale.",
+   "sourceUrl": "https://en.wikipedia.org/wiki/Birbal",
+   "status": "available",
+   "verifiedOn": "2026-11-15",
+   "shelf": "Folk Tales & Wit"
+  },
+  {
+   "id": "tenali-thieves",
+   "title": {
+    "en": "Tenali Rama and the Thieves",
+    "hi": "तेनालीराम और चोर",
+    "te": "తెనాలి రామ – దొంగలు",
+    "kn": "ತೆನಾಲಿ ರಾಮ ಮತ್ತು ಕಳ್ಳರು"
+   },
+   "blurb": {
+    "en": "Thieves hunt for treasure — and water the garden all night.",
+    "hi": "चोर ख़ज़ाना ढूँढते हैं — और रात भर बगीचे को पानी देते हैं।"
+   },
+   "series": "Tenali Rama",
+   "rights": "public_domain",
+   "langs": [
+    "en",
+    "hi",
+    "te",
+    "kn"
+   ],
+   "genres": [
+    "folk",
+    "humour",
+    "wit"
+   ],
+   "age": "5+",
+   "readMinutes": 5,
+   "palette": [
+    "#2b2d77",
+    "#e4432d"
+   ],
+   "cover": {
+    "bg": "garden",
+    "actors": [
+     {
+      "c": "tenali",
+      "x": 120,
+      "y": 250,
+      "s": 1.15,
+      "mood": "smug"
+     },
+     {
+      "c": "thief",
+      "x": 290,
+      "y": 250,
+      "s": 0.95,
+      "flip": true
+     }
+    ]
+   },
+   "credits": [
+    {
+     "author": "Oral folk tradition (Vijayanagara-era, 16th c. onward)",
+     "role": "Story"
+    },
+    {
+     "author": "Comic Gali",
+     "role": "Original retelling, translation and artwork",
+     "note": "CC BY 4.0"
+    }
+   ],
+   "license": {
+    "name": "Story: traditional folk tale · Retelling & art: CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceName": "Oral tradition; no copyrighted text used.",
+   "sourceUrl": "https://en.wikipedia.org/wiki/Tenali_Rama",
+   "status": "available",
+   "verifiedOn": "2026-11-15",
+   "shelf": "Folk Tales & Wit"
+  },
+  {
+   "id": "chacha-chaudhary",
+   "title": {
+    "en": "Chacha Chaudhary",
+    "hi": "चाचा चौधरी"
+   },
+   "blurb": {
+    "en": "Coming soon, once licensed from Diamond Comics.",
+    "hi": "लाइसेंस मिलते ही जल्द आ रहा है।"
+   },
+   "publisher": "Diamond Comics",
+   "rights": "needs_license",
+   "status": "coming_soon",
+   "langs": [
+    "hi",
+    "en"
+   ],
+   "genres": [
+    "humour",
+    "detective"
+   ],
+   "age": "all",
+   "palette": [
+    "#e4432d",
+    "#f5a400"
+   ],
+   "shelf": "Heroes & Humour"
+  },
+  {
+   "id": "sabu",
+   "title": {
+    "en": "Sabu",
+    "hi": "साबू"
+   },
+   "blurb": {
+    "en": "Coming soon, once licensed from Diamond Comics.",
+    "hi": "लाइसेंस मिलते ही जल्द आ रहा है।"
+   },
+   "publisher": "Diamond Comics",
+   "rights": "needs_license",
+   "status": "coming_soon",
+   "langs": [
+    "hi",
+    "en"
+   ],
+   "genres": [
+    "sci-fi",
+    "humour"
+   ],
+   "age": "all",
+   "palette": [
+    "#0e8c7f",
+    "#2b2d77"
+   ],
+   "shelf": "Heroes & Humour"
+  },
+  {
+   "id": "pinki-billoo",
+   "title": {
+    "en": "Pinki & Billoo",
+    "hi": "पिंकी और बिल्लू"
+   },
+   "blurb": {
+    "en": "Coming soon, once licensed from Diamond Comics.",
+    "hi": "लाइसेंस मिलते ही जल्द आ रहा है।"
+   },
+   "publisher": "Diamond Comics",
+   "rights": "needs_license",
+   "status": "coming_soon",
+   "langs": [
+    "hi",
+    "en"
+   ],
+   "genres": [
+    "humour",
+    "kids"
+   ],
+   "age": "all",
+   "palette": [
+    "#f06292",
+    "#7a1fa2"
+   ],
+   "shelf": "Heroes & Humour"
+  },
+  {
+   "id": "nagraj",
+   "title": {
+    "en": "Nagraj",
+    "hi": "नागराज"
+   },
+   "blurb": {
+    "en": "Coming soon, once licensed from Raj Comics.",
+    "hi": "लाइसेंस मिलते ही जल्द आ रहा है।"
+   },
+   "publisher": "Raj Comics",
+   "rights": "needs_license",
+   "status": "coming_soon",
+   "langs": [
+    "hi"
+   ],
+   "genres": [
+    "superhero",
+    "fantasy"
+   ],
+   "age": "all",
+   "palette": [
+    "#1b5e20",
+    "#f5a400"
+   ],
+   "shelf": "Superheroes"
+  },
+  {
+   "id": "super-commando-dhruva",
+   "title": {
+    "en": "Super Commando Dhruva",
+    "hi": "सुपर कमांडो ध्रुव"
+   },
+   "blurb": {
+    "en": "Coming soon, once licensed from Raj Comics.",
+    "hi": "लाइसेंस मिलते ही जल्द आ रहा है।"
+   },
+   "publisher": "Raj Comics",
+   "rights": "needs_license",
+   "status": "coming_soon",
+   "langs": [
+    "hi"
+   ],
+   "genres": [
+    "superhero",
+    "action"
+   ],
+   "age": "all",
+   "palette": [
+    "#2b2d77",
+    "#e4432d"
+   ],
+   "shelf": "Superheroes"
+  },
+  {
+   "id": "doga",
+   "title": {
+    "en": "Doga",
+    "hi": "डोगा"
+   },
+   "blurb": {
+    "en": "Coming soon, once licensed from Raj Comics.",
+    "hi": "लाइसेंस मिलते ही जल्द आ रहा है।"
+   },
+   "publisher": "Raj Comics",
+   "rights": "needs_license",
+   "status": "coming_soon",
+   "langs": [
+    "hi"
+   ],
+   "genres": [
+    "superhero",
+    "action"
+   ],
+   "age": "all",
+   "palette": [
+    "#37474f",
+    "#e4432d"
+   ],
+   "shelf": "Superheroes"
+  },
+  {
+   "id": "amar-chitra-katha",
+   "title": {
+    "en": "Amar Chitra Katha",
+    "hi": "अमर चित्र कथा"
+   },
+   "blurb": {
+    "en": "Coming soon, once licensed from ACK Media.",
+    "hi": "लाइसेंस मिलते ही जल्द आ रहा है।"
+   },
+   "publisher": "ACK Media",
+   "rights": "needs_license",
+   "status": "coming_soon",
+   "langs": [
+    "en",
+    "hi",
+    "ta",
+    "te",
+    "bn",
+    "mr",
+    "gu",
+    "kn",
+    "ml"
+   ],
+   "genres": [
+    "epic",
+    "history",
+    "myth"
+   ],
+   "age": "all",
+   "palette": [
+    "#e4432d",
+    "#f5a400"
+   ],
+   "shelf": "Classics"
+  },
+  {
+   "id": "tinkle",
+   "title": {
+    "en": "Tinkle",
+    "hi": "टिंकल"
+   },
+   "blurb": {
+    "en": "Coming soon, once licensed from ACK Media.",
+    "hi": "लाइसेंस मिलते ही जल्द आ रहा है।"
+   },
+   "publisher": "ACK Media",
+   "rights": "needs_license",
+   "status": "coming_soon",
+   "langs": [
+    "en",
+    "hi"
+   ],
+   "genres": [
+    "humour",
+    "kids",
+    "adventure"
+   ],
+   "age": "all",
+   "palette": [
+    "#0e8c7f",
+    "#f5a400"
+   ],
+   "shelf": "Magazines"
+  },
+  {
+   "id": "champak",
+   "title": {
+    "en": "Champak",
+    "hi": "चम्पक"
+   },
+   "blurb": {
+    "en": "Coming soon, once licensed from Delhi Press.",
+    "hi": "लाइसेंस मिलते ही जल्द आ रहा है।"
+   },
+   "publisher": "Delhi Press",
+   "rights": "needs_license",
+   "status": "coming_soon",
+   "langs": [
+    "hi",
+    "en",
+    "gu",
+    "mr"
+   ],
+   "genres": [
+    "kids",
+    "animals"
+   ],
+   "age": "all",
+   "palette": [
+    "#f5a400",
+    "#0e8c7f"
+   ],
+   "shelf": "Magazines"
+  },
+  {
+   "id": "chandamama",
+   "title": {
+    "en": "Chandamama",
+    "hi": "चंदामामा"
+   },
+   "blurb": {
+    "en": "Coming soon, once licensed from Chandamama (current rights-holder to be confirmed).",
+    "hi": "लाइसेंस मिलते ही जल्द आ रहा है।"
+   },
+   "publisher": "Chandamama (current rights-holder to be confirmed)",
+   "rights": "needs_license",
+   "status": "coming_soon",
+   "langs": [
+    "hi",
+    "ta",
+    "te",
+    "kn",
+    "ml",
+    "bn",
+    "en"
+   ],
+   "genres": [
+    "folk",
+    "fantasy"
+   ],
+   "age": "all",
+   "palette": [
+    "#2b2d77",
+    "#f5a400"
+   ],
+   "shelf": "Magazines"
+  },
+  {
+   "id": "parag",
+   "title": {
+    "en": "Parag",
+    "hi": "पराग"
+   },
+   "blurb": {
+    "en": "Coming soon, once licensed from Parag (Tata Trusts).",
+    "hi": "लाइसेंस मिलते ही जल्द आ रहा है।"
+   },
+   "publisher": "Parag (Tata Trusts)",
+   "rights": "needs_license",
+   "status": "coming_soon",
+   "langs": [
+    "hi"
+   ],
+   "genres": [
+    "kids",
+    "stories"
+   ],
+   "age": "all",
+   "palette": [
+    "#7a1fa2",
+    "#f5a400"
+   ],
+   "shelf": "Magazines"
+  },
+  {
+   "id": "balarama",
+   "title": {
+    "en": "Balarama",
+    "hi": "ബാലരമ"
+   },
+   "blurb": {
+    "en": "Coming soon, once licensed from Malayala Manorama.",
+    "hi": "लाइसेंस मिलते ही जल्द आ रहा है।"
+   },
+   "publisher": "Malayala Manorama",
+   "rights": "needs_license",
+   "status": "coming_soon",
+   "langs": [
+    "ml"
+   ],
+   "genres": [
+    "kids",
+    "humour"
+   ],
+   "age": "all",
+   "palette": [
+    "#e4432d",
+    "#2b2d77"
+   ],
+   "shelf": "Regional Favourites"
+  },
+  {
+   "id": "indrajal",
+   "title": {
+    "en": "Indrajal Comics",
+    "hi": "इंद्रजाल कॉमिक्स"
+   },
+   "blurb": {
+    "en": "Coming soon, once licensed from Bennett, Coleman & Co..",
+    "hi": "लाइसेंस मिलते ही जल्द आ रहा है।"
+   },
+   "publisher": "Bennett, Coleman & Co.",
+   "rights": "needs_license",
+   "status": "coming_soon",
+   "langs": [
+    "en",
+    "hi"
+   ],
+   "genres": [
+    "adventure",
+    "classic"
+   ],
+   "age": "all",
+   "palette": [
+    "#455a64",
+    "#f5a400"
+   ],
+   "shelf": "Classics"
+  },
+  {
+   "id": "nandan",
+   "title": {
+    "en": "Nandan",
+    "hi": "नंदन"
+   },
+   "blurb": {
+    "en": "Coming soon, once licensed from Hindustan Times Media.",
+    "hi": "लाइसेंस मिलते ही जल्द आ रहा है।"
+   },
+   "publisher": "Hindustan Times Media",
+   "rights": "needs_license",
+   "status": "coming_soon",
+   "langs": [
+    "hi"
+   ],
+   "genres": [
+    "kids",
+    "stories"
+   ],
+   "age": "all",
+   "palette": [
+    "#0e8c7f",
+    "#e4432d"
+   ],
+   "shelf": "Magazines"
+  }
+ ]
+}

@@ -1,0 +1,53 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C — Neon Gali (night alley of shutters)</title>
+<link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Space+Grotesk:wght@400;600&family=Mukta:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0816;--pink:#ff3d81;--amber:#ffb23e;--cyan:#27e1d0;--cream:#f1e7d0}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--cream);font-family:'Space Grotesk',Mukta,sans-serif;overflow-x:hidden}
+.alley{position:relative;min-height:880px;background:radial-gradient(900px 500px at 50% 62%,#3a1a5a66,transparent),linear-gradient(#0a0816,#14102a 70%,#1c1230);overflow:hidden}
+.wires{position:absolute;inset:0 0 auto 0;height:180px;width:100%}
+.top{position:relative;z-index:3;display:flex;justify-content:space-between;padding:18px 34px;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:#cbbfe0}
+.top b{font:400 22px 'Yatra One';color:var(--amber);letter-spacing:1px;text-transform:none;text-shadow:0 0 12px #ffb23e99}
+.sign{position:relative;z-index:3;text-align:center;margin-top:14px}
+.sign h1{display:inline-block;font:400 clamp(48px,10vw,112px)/1 'Yatra One';color:#fff3f8;text-shadow:0 0 6px var(--pink),0 0 18px var(--pink),0 0 48px var(--pink);animation:fl 6s infinite;padding:4px 30px;border:4px solid #ff8ab3;border-radius:12px;box-shadow:0 0 14px var(--pink),inset 0 0 14px var(--pink)}
+@keyframes fl{0%,18%,22%,60%,100%{opacity:1}20%,21%{opacity:.35}61%{opacity:.7}}
+.sign p{margin-top:12px;font:400 15px 'Space Grotesk';letter-spacing:6px;color:var(--cyan);text-shadow:0 0 10px var(--cyan);text-transform:uppercase}
+.street{position:relative;z-index:2;display:grid;grid-template-columns:repeat(5,1fr);gap:0;max-width:1180px;margin:46px auto 0;padding:0 18px;perspective:1100px;align-items:end}
+.shop{position:relative;height:420px;margin:0 8px;background:#150f26;border:2px solid #2a1f47;border-bottom:0;overflow:hidden}
+.shop:nth-child(1){transform:rotateY(18deg)}.shop:nth-child(2){transform:rotateY(8deg)}.shop:nth-child(4){transform:rotateY(-8deg)}.shop:nth-child(5){transform:rotateY(-18deg)}
+.glow{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:14px;font:400 26px/1 'Yatra One'}
+.shop .lbl{position:absolute;top:0;left:0;right:0;padding:8px 10px;font:600 11px 'Space Grotesk';letter-spacing:3px;text-transform:uppercase;border-bottom:2px solid;background:#0b0818;z-index:3}
+.shutter{position:absolute;left:0;right:0;top:34px;height:var(--h);background:repeating-linear-gradient(#5a5470 0 7px,#3d3852 7px 9px);z-index:2;border-bottom:6px solid #2a2640;transition:height .5s}
+.shop:hover .shutter{height:0}
+.shop.a .glow{background:radial-gradient(circle at 50% 80%,#27e1d055,transparent 70%),linear-gradient(#0d2f33,#0b1a2b);color:#d8fffb}.shop.a .lbl{border-color:var(--cyan);color:var(--cyan)}
+.shop.b .glow{background:radial-gradient(circle at 50% 80%,#ff3d8166,transparent 70%),linear-gradient(#3a0f2b,#190a22);color:#ffe3ee}.shop.b .lbl{border-color:var(--pink);color:var(--pink)}
+.shop.c .glow{background:radial-gradient(circle at 50% 80%,#ffb23e66,transparent 70%),linear-gradient(#3a2208,#1a1020);color:#fff0d0}.shop.c .lbl{border-color:var(--amber);color:var(--amber)}
+.shop.d .glow{background:radial-gradient(circle at 50% 80%,#8a5cff66,transparent 70%),linear-gradient(#22124a,#120a2a);color:#ece3ff}.shop.d .lbl{border-color:#a98bff;color:#a98bff}
+.shop.x .glow{background:#110d20;color:#6f6788}.shop.x .lbl{border-color:#4a4466;color:#6f6788}
+.shop .glow small{font:400 11px 'Space Grotesk';letter-spacing:2px;text-transform:uppercase;opacity:.8;margin-top:8px}
+.shop .halftone{position:absolute;inset:34px 0 0;background:radial-gradient(#fff2 1.4px,transparent 1.9px) 0 0/7px 7px}
+.road{position:relative;z-index:2;height:60px;max-width:1180px;margin:0 auto;background:linear-gradient(#1c1230,#0a0816);border-top:2px solid #3a2d63}
+.road:after{content:"";position:absolute;left:0;right:0;top:-2px;height:60px;background:linear-gradient(90deg,transparent,#ff3d8133 20%,#27e1d033 50%,#ffb23e33 80%,transparent);filter:blur(14px)}
+.stub{position:absolute;left:34px;bottom:22px;z-index:4;border:2px solid var(--amber);padding:10px 16px;font-size:13px;background:#150f26cc;box-shadow:0 0 18px #ffb23e44;letter-spacing:1px}
+.stub b{display:block;font:400 17px 'Yatra One';color:var(--amber)}
+.radio{position:absolute;right:30px;bottom:22px;z-index:4;display:flex;align-items:center;gap:14px;background:#150f26cc;border:2px solid var(--cyan);padding:10px 16px;box-shadow:0 0 18px #27e1d044}
+.radio .pl{width:38px;height:38px;border-radius:50%;border:2px solid var(--cyan);display:grid;place-items:center;color:var(--cyan)}
+.eq{display:flex;gap:3px;align-items:flex-end;height:22px}.eq i{width:4px;background:var(--cyan);animation:q 1s infinite}.eq i:nth-child(2){animation-delay:.3s}.eq i:nth-child(3){animation-delay:.6s}.eq i:nth-child(4){animation-delay:.15s}
+@keyframes q{0%,100%{height:5px}50%{height:22px}}
+@media(max-width:860px){.street{grid-template-columns:repeat(2,1fr);gap:18px}.shop{transform:none!important;height:300px}.stub,.radio{position:relative;left:auto;right:auto;bottom:auto;margin:16px 18px}.top span{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style></head><body><div class="alley">
+<svg class="wires" viewBox="0 0 1200 180" preserveAspectRatio="none"><g fill="none" stroke="#2a1f47" stroke-width="2"><path d="M0 20 Q300 120 600 30 T1200 40"/><path d="M0 60 Q250 150 560 70 T1200 90"/><path d="M0 100 Q400 40 800 120 T1200 70"/></g><g fill="#ffb23e"><circle cx="120" cy="66" r="4"/><circle cx="300" cy="84" r="4"/><circle cx="470" cy="62" r="4"/><circle cx="640" cy="52" r="4"/><circle cx="840" cy="60" r="4"/><circle cx="1010" cy="50" r="4"/></g></svg>
+<div class="top"><b>Comic Gali</b><span>Library &nbsp;·&nbsp; Listen &nbsp;·&nbsp; Languages &nbsp;·&nbsp; Creators</span><span>EN · हि · த · తె</span></div>
+<div class="sign"><h1>कॉमिक गली</h1><p>open late · read it · hear it</p></div>
+<div class="street">
+ <div class="shop a"><div class="lbl">Jataka</div><div class="shutter" style="--h:0px"></div><div class="halftone"></div><div class="glow">Bandar aur Magarmach<small>4 languages · 4 min</small></div></div>
+ <div class="shop b"><div class="lbl">Jataka</div><div class="shutter" style="--h:90px"></div><div class="halftone"></div><div class="glow">The Banyan Deer<small>3 languages · 5 min</small></div></div>
+ <div class="shop c"><div class="lbl">Akbar–Birbal</div><div class="shutter" style="--h:0px"></div><div class="halftone"></div><div class="glow">Birbal &amp; the Crows<small>3 languages · 4 min</small></div></div>
+ <div class="shop d"><div class="lbl">Tenali Rama</div><div class="shutter" style="--h:120px"></div><div class="halftone"></div><div class="glow">Tenali &amp; the Thieves<small>4 languages · 5 min</small></div></div>
+ <div class="shop x"><div class="lbl">Opening soon</div><div class="shutter" style="--h:330px"></div><div class="glow">Chacha<br>Chaudhary<small>Needs licence</small></div></div>
+</div>
+<div class="road"></div>
+<div class="stub"><b>Continue</b>Banyan Deer · panel 5/8 · हिन्दी</div>
+<div class="radio"><div class="pl">&#9654;</div><div class="eq"><i></i><i></i><i></i><i></i></div><span style="font-size:13px;letter-spacing:2px">NOW NARRATING · 1.0×</span></div>
+</div></body></html>

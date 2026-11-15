@@ -1,0 +1,55 @@
+// One-off generator for content-src/catalog.json (edit this file, then `node scripts/make-catalog.mjs`).
+import { writeFileSync } from 'node:fs';
+const D = '2026-11-15';
+const avail = [
+  { id: 'monkey-crocodile', title: { en: 'The Monkey and the Crocodile', hi: 'बंदर और मगरमच्छ', ta: 'குரங்கும் முதலையும்', mr: 'माकड आणि मगर' },
+    blurb: { en: 'A clever monkey outwits a crocodile who wants his heart.', hi: 'एक चतुर बंदर उस मगरमच्छ को मात देता है जो उसका दिल खाना चाहता है।' },
+    series: 'Jataka Tales', rights: 'public_domain', langs: ['en', 'hi', 'ta', 'mr'], genres: ['folk', 'animals', 'wit'], age: 'all', readMinutes: 4, palette: ['#0e8c7f', '#f5a400'],
+    cover: { bg: 'riverbank', actors: [{ c: 'monkey', x: 120, y: 160, s: 1 }, { c: 'croc', x: 290, y: 240, s: 0.7 }] },
+    credits: [{ author: 'Traditional Jataka tale (c. 3rd c. BCE onward)', role: 'Story' }, { author: 'Comic Gali', role: 'Original retelling, translation and artwork', note: 'Text and art released under CC BY 4.0' }],
+    license: { name: 'Story: public domain · Retelling & art: CC BY 4.0', url: 'https://creativecommons.org/licenses/by/4.0/' },
+    sourceName: 'Project Gutenberg #62514 — Jataka Tales (E. C. Babbitt, 1912), story I; plot reference only', sourceUrl: 'https://www.gutenberg.org/ebooks/62514' },
+  { id: 'banyan-deer', title: { en: 'The Banyan Deer', hi: 'वट-मृग', bn: 'বট-হরিণ' },
+    blurb: { en: 'A golden deer king offers his own life for a mother and her fawn.', hi: 'सुनहरा हिरन राजा एक माँ और उसके बच्चे के लिए अपनी जान देने चलता है।' },
+    series: 'Jataka Tales', rights: 'public_domain', langs: ['en', 'hi', 'bn'], genres: ['folk', 'animals', 'moral'], age: 'all', readMinutes: 5, palette: ['#e4432d', '#2b2d77'],
+    cover: { bg: 'forest', actors: [{ c: 'deerking', x: 200, y: 245, s: 1.1 }, { c: 'fawn', x: 310, y: 248, s: 1 }] },
+    credits: [{ author: 'Traditional Jataka tale', role: 'Story' }, { author: 'Comic Gali', role: 'Original retelling, translation and artwork', note: 'CC BY 4.0' }],
+    license: { name: 'Story: public domain · Retelling & art: CC BY 4.0', url: 'https://creativecommons.org/licenses/by/4.0/' },
+    sourceName: 'Project Gutenberg #62514 — Jataka Tales (E. C. Babbitt, 1912), story XII; plot reference only', sourceUrl: 'https://www.gutenberg.org/ebooks/62514' },
+  { id: 'akbar-birbal-crows', title: { en: 'Birbal and the Crows', hi: 'बीरबल और कौए', gu: 'બીરબલ અને કાગડા' },
+    blurb: { en: 'How many crows live in the city? Birbal has an answer nobody can disprove.', hi: 'शहर में कितने कौए हैं? बीरबल के पास ऐसा उत्तर है जिसे कोई ग़लत नहीं कर सकता।' },
+    series: 'Akbar–Birbal', rights: 'public_domain', langs: ['en', 'hi', 'gu'], genres: ['folk', 'humour', 'wit'], age: 'all', readMinutes: 4, palette: ['#7a1fa2', '#f5a400'],
+    cover: { bg: 'palace', actors: [{ c: 'akbar', x: 130, y: 250, s: 1.1 }, { c: 'birbal', x: 270, y: 250, s: 1.05, flip: true }] },
+    credits: [{ author: 'Oral folk tradition (Mughal-era, 16th c. onward)', role: 'Story' }, { author: 'Comic Gali', role: 'Original retelling, translation and artwork', note: 'CC BY 4.0' }],
+    license: { name: 'Story: traditional folk tale · Retelling & art: CC BY 4.0', url: 'https://creativecommons.org/licenses/by/4.0/' },
+    sourceName: 'Oral tradition; no copyrighted text used. Retold from common knowledge of the tale.', sourceUrl: 'https://en.wikipedia.org/wiki/Birbal' },
+  { id: 'tenali-thieves', title: { en: 'Tenali Rama and the Thieves', hi: 'तेनालीराम और चोर', te: 'తెనాలి రామ – దొంగలు', kn: 'ತೆನಾಲಿ ರಾಮ ಮತ್ತು ಕಳ್ಳರು' },
+    blurb: { en: 'Thieves hunt for treasure — and water the garden all night.', hi: 'चोर ख़ज़ाना ढूँढते हैं — और रात भर बगीचे को पानी देते हैं।' },
+    series: 'Tenali Rama', rights: 'public_domain', langs: ['en', 'hi', 'te', 'kn'], genres: ['folk', 'humour', 'wit'], age: '5+', readMinutes: 5, palette: ['#2b2d77', '#e4432d'],
+    cover: { bg: 'garden', actors: [{ c: 'tenali', x: 120, y: 250, s: 1.15, mood: 'smug' }, { c: 'thief', x: 290, y: 250, s: 0.95, flip: true }] },
+    credits: [{ author: 'Oral folk tradition (Vijayanagara-era, 16th c. onward)', role: 'Story' }, { author: 'Comic Gali', role: 'Original retelling, translation and artwork', note: 'CC BY 4.0' }],
+    license: { name: 'Story: traditional folk tale · Retelling & art: CC BY 4.0', url: 'https://creativecommons.org/licenses/by/4.0/' },
+    sourceName: 'Oral tradition; no copyrighted text used.', sourceUrl: 'https://en.wikipedia.org/wiki/Tenali_Rama' },
+].map((a) => ({ ...a, status: 'available', verifiedOn: D, shelf: 'Folk Tales & Wit' }));
+
+const soon = [
+  ['chacha-chaudhary', 'Chacha Chaudhary', 'चाचा चौधरी', 'Diamond Comics', ['hi', 'en'], ['humour', 'detective'], 'Heroes & Humour', ['#e4432d', '#f5a400']],
+  ['sabu', 'Sabu', 'साबू', 'Diamond Comics', ['hi', 'en'], ['sci-fi', 'humour'], 'Heroes & Humour', ['#0e8c7f', '#2b2d77']],
+  ['pinki-billoo', 'Pinki & Billoo', 'पिंकी और बिल्लू', 'Diamond Comics', ['hi', 'en'], ['humour', 'kids'], 'Heroes & Humour', ['#f06292', '#7a1fa2']],
+  ['nagraj', 'Nagraj', 'नागराज', 'Raj Comics', ['hi'], ['superhero', 'fantasy'], 'Superheroes', ['#1b5e20', '#f5a400']],
+  ['super-commando-dhruva', 'Super Commando Dhruva', 'सुपर कमांडो ध्रुव', 'Raj Comics', ['hi'], ['superhero', 'action'], 'Superheroes', ['#2b2d77', '#e4432d']],
+  ['doga', 'Doga', 'डोगा', 'Raj Comics', ['hi'], ['superhero', 'action'], 'Superheroes', ['#37474f', '#e4432d']],
+  ['amar-chitra-katha', 'Amar Chitra Katha', 'अमर चित्र कथा', 'ACK Media', ['en', 'hi', 'ta', 'te', 'bn', 'mr', 'gu', 'kn', 'ml'], ['epic', 'history', 'myth'], 'Classics', ['#e4432d', '#f5a400']],
+  ['tinkle', 'Tinkle', 'टिंकल', 'ACK Media', ['en', 'hi'], ['humour', 'kids', 'adventure'], 'Magazines', ['#0e8c7f', '#f5a400']],
+  ['champak', 'Champak', 'चम्पक', 'Delhi Press', ['hi', 'en', 'gu', 'mr'], ['kids', 'animals'], 'Magazines', ['#f5a400', '#0e8c7f']],
+  ['chandamama', 'Chandamama', 'चंदामामा', 'Chandamama (current rights-holder to be confirmed)', ['hi', 'ta', 'te', 'kn', 'ml', 'bn', 'en'], ['folk', 'fantasy'], 'Magazines', ['#2b2d77', '#f5a400']],
+  ['parag', 'Parag', 'पराग', 'Parag (Tata Trusts)', ['hi'], ['kids', 'stories'], 'Magazines', ['#7a1fa2', '#f5a400']],
+  ['balarama', 'Balarama', 'ബാലരമ', 'Malayala Manorama', ['ml'], ['kids', 'humour'], 'Regional Favourites', ['#e4432d', '#2b2d77']],
+  ['indrajal', 'Indrajal Comics', 'इंद्रजाल कॉमिक्स', 'Bennett, Coleman & Co.', ['en', 'hi'], ['adventure', 'classic'], 'Classics', ['#455a64', '#f5a400']],
+  ['nandan', 'Nandan', 'नंदन', 'Hindustan Times Media', ['hi'], ['kids', 'stories'], 'Magazines', ['#0e8c7f', '#e4432d']],
+].map(([id, en, hi, publisher, langs, genres, shelf, palette]) => ({
+  id, title: { en, hi }, blurb: { en: `Coming soon, once licensed from ${publisher}.`, hi: 'लाइसेंस मिलते ही जल्द आ रहा है।' },
+  publisher, rights: 'needs_license', status: 'coming_soon', langs, genres, age: 'all', palette, shelf,
+}));
+writeFileSync('content-src/catalog.json', JSON.stringify({ version: 1, updated: D, items: [...avail, ...soon] }, null, 1));
+console.log('catalog', avail.length + soon.length);

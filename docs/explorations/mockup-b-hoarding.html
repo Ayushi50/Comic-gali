@@ -1,0 +1,62 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>B — Hoarding (painted cinema poster)</title>
+<link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Bebas+Neue&family=Mukta:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--y:#ffb800;--r:#d9301f;--b:#14224f;--t:#0f7a6e;--c:#f4e6c4;--k:#120d1c}
+*{box-sizing:border-box;margin:0}
+body{background:#1a1226;color:var(--c);font-family:Mukta,sans-serif}
+.wall{background:radial-gradient(1200px 500px at 50% -10%,#3b2a5e,transparent),#1a1226;padding:0 0 30px;position:relative;overflow:hidden}
+.wall:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,#0000 0 58px,#0003 58px 60px),repeating-linear-gradient(90deg,#0000 0 118px,#0002 118px 120px);pointer-events:none}
+header{display:flex;justify-content:space-between;align-items:center;padding:16px 34px;position:relative;font:400 20px 'Bebas Neue';letter-spacing:3px}
+header b{font:400 28px 'Yatra One';color:var(--y);letter-spacing:1px}
+header nav{display:flex;gap:26px}
+.poster{position:relative;margin:6px auto 0;width:min(1120px,94%);aspect-ratio:16/8;border:10px solid var(--k);outline:3px solid var(--y);overflow:hidden;background:conic-gradient(from 200deg at 68% 62%,#e8402b,#ffb800,#e8402b,#ffb800,#e8402b,#ffb800,#e8402b,#ffb800,#e8402b);box-shadow:0 30px 60px #000a}
+.poster:before{content:"";position:absolute;inset:0;background:radial-gradient(#0003 1.3px,transparent 1.8px) 0 0/6px 6px}
+.poster svg{position:absolute;inset:0;width:100%;height:100%}
+.title{position:absolute;left:3%;top:9%;max-width:56%;transform:rotate(-3deg)}
+.title small{font:400 22px 'Bebas Neue';letter-spacing:6px;background:var(--k);color:var(--y);padding:2px 12px;display:inline-block}
+.title h1{font:400 clamp(44px,8.4vw,112px)/.88 'Yatra One';color:var(--c);text-shadow:4px 4px 0 var(--r),8px 8px 0 var(--k);margin-top:8px}
+.tag{position:absolute;left:3.4%;bottom:7%;font:italic 700 17px Mukta;max-width:38%;color:var(--k);background:var(--c);padding:8px 12px;transform:rotate(-1.2deg);border:3px solid var(--k)}
+.cta{position:absolute;right:3%;bottom:6%;display:flex;gap:10px}
+.cta span{font:400 22px 'Bebas Neue';letter-spacing:3px;padding:8px 18px;border:3px solid var(--k);background:var(--y);color:var(--k);box-shadow:4px 4px 0 var(--k)}
+.cta span.s{background:var(--c)}
+.bulbs{position:absolute;inset:0;border:10px dotted #fff7c8;opacity:.0}
+.cast{display:flex;gap:10px;margin:0 auto;width:min(1120px,94%);font:400 15px 'Bebas Neue';letter-spacing:3px;color:var(--y);padding:10px 0;justify-content:space-between}
+.sec{width:min(1120px,94%);margin:14px auto 0}
+.sec h2{font:400 34px 'Bebas Neue';letter-spacing:5px;display:flex;align-items:center;gap:16px}
+.sec h2:after{content:"";flex:1;height:3px;background:var(--y)}
+.pasted{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:14px;align-items:start}
+.pp{position:relative;aspect-ratio:2/3;border:5px solid var(--c);padding:10px;display:flex;flex-direction:column;justify-content:space-between;color:var(--c);box-shadow:6px 8px 0 #0008;font-family:'Bebas Neue'}
+.pp:nth-child(odd){transform:rotate(-1.3deg)}.pp:nth-child(even){transform:rotate(1deg) translateY(10px)}
+.pp:before{content:"";position:absolute;inset:0;background:radial-gradient(#0003 1.2px,transparent 1.7px) 0 0/5px 5px}
+.pp i{font:normal 12px Mukta;letter-spacing:2px;text-transform:uppercase;position:relative}
+.pp b{font:400 30px/.92 'Yatra One';text-shadow:3px 3px 0 var(--k);position:relative}
+.pp.t{background:linear-gradient(170deg,var(--t),#0a3a52)}.pp.r{background:linear-gradient(170deg,var(--r),#6b1222)}.pp.p{background:linear-gradient(170deg,#6b2a9c,#241450)}.pp.y{background:linear-gradient(170deg,#e29100,#a8341a)}
+.pp.torn{background:#2a2438;border-color:#6b6478;color:#9d96ac}.pp.torn:after{content:"COMING SOON";position:absolute;left:-10px;right:-10px;top:42%;background:var(--r);color:var(--c);font:400 20px 'Bebas Neue';letter-spacing:5px;text-align:center;padding:4px 0;transform:rotate(-8deg);border-block:3px solid var(--k)}
+.bar{width:min(1120px,94%);margin:34px auto 0;background:var(--k);border:3px solid var(--y);padding:10px 16px;display:flex;align-items:center;gap:16px;font:400 18px 'Bebas Neue';letter-spacing:3px}
+.eq{display:flex;gap:3px;align-items:flex-end;height:26px}.eq i{width:5px;background:var(--y);animation:q 1s infinite ease-in-out}.eq i:nth-child(2){animation-delay:.2s}.eq i:nth-child(3){animation-delay:.5s}.eq i:nth-child(4){animation-delay:.1s}.eq i:nth-child(5){animation-delay:.7s}
+@keyframes q{0%,100%{height:6px}50%{height:26px}}
+@media(max-width:820px){.pasted{grid-template-columns:repeat(2,1fr)}.title{max-width:90%}.tag,.cast{display:none}header nav{display:none}.poster{aspect-ratio:4/5}}
+</style></head><body><div class="wall">
+<header><b>COMIC GALI</b><nav><span>Library</span><span>Listen</span><span>Languages</span><span>Creators</span></nav><span>EN · हि · த · తె</span></header>
+<section class="poster" aria-label="Featured">
+ <svg viewBox="0 0 1120 560" preserveAspectRatio="xMidYMid slice"><g>
+  <path d="M0 470 C250 420 520 480 760 440 S1020 430 1120 450 V560 H0Z" fill="#14224f"/>
+  <ellipse cx="780" cy="470" rx="240" ry="34" fill="#0f7a6e" stroke="#120d1c" stroke-width="6"/>
+  <path d="M560 460 C640 400 760 410 840 440 C920 410 1010 420 1060 456 C990 500 640 506 560 460Z" fill="#2d8a4a" stroke="#120d1c" stroke-width="7"/>
+  <path d="M1010 450 l50 -8 l-10 22 Z M600 440 l14 -22 l14 22Z M650 430 l14 -22 l14 22Z" fill="#f4e6c4" stroke="#120d1c" stroke-width="4"/>
+  <circle cx="1030" cy="440" r="14" fill="#fff" stroke="#120d1c" stroke-width="4"/><circle cx="1034" cy="440" r="6" fill="#120d1c"/>
+  <path d="M700 330 C690 250 740 200 780 170" stroke="#120d1c" stroke-width="44" fill="none" stroke-linecap="round"/>
+  <path d="M700 330 C690 250 740 200 780 170" stroke="#8b5a2b" stroke-width="32" fill="none" stroke-linecap="round"/>
+  <circle cx="800" cy="150" r="52" fill="#8b5a2b" stroke="#120d1c" stroke-width="7"/><ellipse cx="814" cy="164" rx="34" ry="30" fill="#e8c28d"/>
+  <circle cx="800" cy="142" r="11" fill="#fff" stroke="#120d1c" stroke-width="4"/><circle cx="830" cy="142" r="11" fill="#fff" stroke="#120d1c" stroke-width="4"/><circle cx="803" cy="144" r="5" fill="#120d1c"/><circle cx="833" cy="144" r="5" fill="#120d1c"/>
+  <path d="M800 186 q16 22 34 0" fill="#7a1020" stroke="#120d1c" stroke-width="4"/></g></svg>
+ <div class="title"><small>JATAKA · A CLASSIC RETOLD</small><h1>BANDAR<br>AUR MAGARMACH</h1></div>
+ <div class="tag">"Who ever keeps their heart in a tree?" — read it in 4 languages, or press play.</div>
+ <div class="cta"><span>READ</span><span class="s">LISTEN</span></div></section>
+<div class="cast"><span>PUBLIC DOMAIN</span><span>HINDI · ENGLISH · TAMIL · MARATHI</span><span>4 MIN</span><span>ORIGINAL ART</span></div>
+<div class="sec"><h2>NOW SHOWING</h2><div class="pasted">
+ <div class="pp t"><i>Jataka</i><b>The Banyan Deer</b></div><div class="pp r"><i>Akbar–Birbal</i><b>Birbal &amp; the Crows</b></div>
+ <div class="pp p"><i>Tenali Rama</i><b>Tenali &amp; the Thieves</b></div><div class="pp y"><i>Jataka</i><b>Bandar aur Magarmach</b></div>
+ <div class="pp torn"><i>Diamond Comics</i><b>Chacha Chaudhary</b></div></div></div>
+<div class="bar"><div class="eq"><i></i><i></i><i></i><i></i><i></i></div>NOW NARRATING · VAT-MRIG · PANEL 5/8<span style="margin-left:auto;color:var(--y)">1.0× · SLEEP 20 · DRIVING MODE</span></div>
+</div></body></html>

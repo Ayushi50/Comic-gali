@@ -1,0 +1,87 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Comic Gali — home mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Mukta:wght@400;600;800&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--mari:#f5a400;--verm:#e4432d;--indigo:#2b2d77;--peacock:#0e8c7f;--cream:#f6ebd0;--ink:#1b1530}
+*{box-sizing:border-box;margin:0}
+body{font-family:Mukta,sans-serif;color:var(--cream);background:#241448;overflow-x:hidden}
+.sky{position:relative;min-height:760px;background:linear-gradient(#2a1458 0%,#7a2f7c 38%,#ff7a45 78%,#ffc067 100%);overflow:hidden}
+.sky:before{content:"";position:absolute;inset:0;background:radial-gradient(rgba(27,21,48,.22) 1.2px,transparent 1.6px) 0 0/7px 7px;mix-blend-mode:multiply;pointer-events:none}
+.top{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;position:relative;z-index:5;font-weight:600;font-size:15px}
+.top nav{display:flex;gap:22px}.top .pill{border:2px solid var(--cream);padding:4px 12px;border-radius:99px}
+.bunting{position:absolute;top:0;left:0;width:100%;height:90px;z-index:2}
+.sign{position:relative;z-index:4;margin:34px auto 0;width:min(620px,88%);padding:18px 24px 14px;text-align:center;background:var(--verm);border:6px solid var(--mari);border-radius:10px;box-shadow:0 0 0 4px var(--ink),0 14px 0 -2px #0006;transform:rotate(-1.2deg)}
+.sign h1{font-family:'Yatra One',serif;font-weight:400;font-size:clamp(40px,8vw,84px);line-height:1;color:var(--mari);letter-spacing:2px;text-shadow:3px 3px 0 var(--ink),-1px -1px 0 var(--ink)}
+.sign p{font-family:Kalam,cursive;font-size:clamp(15px,2.3vw,22px);color:var(--cream);margin-top:4px}
+.sign:before,.sign:after{content:"";position:absolute;top:100%;width:3px;height:34px;background:var(--ink);left:14%}.sign:after{left:auto;right:14%}
+.string{position:absolute;left:0;width:100%;height:230px;z-index:3}
+.hang{position:absolute;width:112px;aspect-ratio:3/4;border:3px solid var(--ink);box-shadow:4px 6px 0 #0005;transform-origin:50% -18px;animation:sway 5s ease-in-out infinite;display:flex;align-items:flex-end;padding:8px;font-family:'Yatra One';font-size:15px;line-height:1.05;color:var(--cream);text-shadow:1px 1px 0 var(--ink);background-size:10px 10px}
+.hang:before{content:"";position:absolute;top:-16px;left:50%;width:12px;height:26px;margin-left:-6px;background:#c9a26b;border:2px solid var(--ink);border-radius:2px}
+@keyframes sway{50%{transform:rotate(3deg)}}@media(prefers-reduced-motion:reduce){.hang,.rack{animation:none}}
+.stage{display:grid;grid-template-columns:1fr 1.2fr 1fr;align-items:end;gap:10px;max-width:1100px;margin:150px auto 0;padding:0 20px;position:relative;z-index:4}
+.rackwrap{perspective:900px;height:300px;display:flex;justify-content:center;align-items:flex-end}
+.rack{position:relative;width:110px;height:200px;transform-style:preserve-3d;animation:spin 16s linear infinite}
+@keyframes spin{to{transform:rotateY(360deg)}}
+.rack div{position:absolute;inset:0;border:3px solid var(--ink);display:flex;align-items:flex-end;padding:6px;font-family:'Yatra One';font-size:14px;text-shadow:1px 1px 0 var(--ink)}
+.pole{position:absolute;bottom:-6px;width:10px;height:280px;background:#3a2a1a;border:2px solid var(--ink);z-index:-1}
+.ticket{position:relative;background:var(--cream);color:var(--ink);padding:14px 16px 14px 54px;border:3px solid var(--ink);border-radius:6px;font-family:Kalam;box-shadow:5px 6px 0 #0005;transform:rotate(1.5deg)}
+.ticket:before{content:"CONTINUE";position:absolute;left:0;top:0;bottom:0;width:38px;background:var(--mari);border-right:3px dashed var(--ink);writing-mode:vertical-rl;transform:rotate(180deg);text-align:center;font:700 13px Mukta;letter-spacing:3px;line-height:38px}
+.ticket b{font-family:'Yatra One';font-weight:400;font-size:19px;display:block}
+.ticket .bar{height:8px;background:#0002;border-radius:4px;margin-top:8px}.ticket .bar i{display:block;height:100%;width:62%;background:var(--verm);border-radius:4px}
+.chai{text-align:center;font-family:Kalam;font-size:18px}
+.chai .cup{display:inline-block;width:70px;height:54px;background:var(--cream);border:3px solid var(--ink);border-radius:4px 4px 30px 30px;position:relative}
+.chai .cup:before{content:"";position:absolute;right:-20px;top:8px;width:20px;height:24px;border:3px solid var(--ink);border-left:0;border-radius:0 14px 14px 0}
+.ground{height:70px;background:#3a2a1a;border-top:6px solid var(--mari);position:relative;z-index:3;margin-top:-4px}
+.shelf{background:var(--cream);color:var(--ink);padding:34px 28px 40px;position:relative;
+background-image:radial-gradient(rgba(27,21,48,.08) 1px,transparent 1.4px);background-size:6px 6px}
+.shelf h2{font-family:'Yatra One';font-weight:400;font-size:30px;display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.shelf h2:after{content:"";flex:1;height:14px;background:radial-gradient(circle at 7px 7px,var(--verm) 3px,transparent 3.5px) 0 0/22px 14px repeat-x}
+.row{display:flex;gap:18px;overflow:auto;padding:8px 4px 22px}
+.card{flex:0 0 150px}
+.cover{aspect-ratio:3/4;border:3px solid var(--ink);box-shadow:5px 6px 0 var(--ink);padding:9px;display:flex;flex-direction:column;justify-content:flex-end;color:var(--cream);font-family:'Yatra One';font-size:17px;line-height:1.05;text-shadow:1px 1px 0 var(--ink);position:relative;transition:transform .15s}
+.cover:hover{transform:translate(-2px,-3px) rotate(-1deg)}
+.card small{display:block;font:600 12px Mukta;margin-top:10px}
+.badge{display:inline-block;font:800 10px Mukta;letter-spacing:.8px;background:var(--peacock);color:#fff;padding:2px 6px;border-radius:3px;margin-top:3px}
+.soon .cover{filter:saturate(.35)}
+.soon .cover:after{content:"JALDI AA RAHA HAI";position:absolute;inset:auto -3px 38%;background:var(--ink);color:var(--mari);text-align:center;font:800 10px Mukta;letter-spacing:1.5px;padding:5px 0;transform:rotate(-6deg);border-block:2px solid var(--mari)}
+.badge.l{background:var(--ink)}
+.listen{position:sticky;bottom:0;z-index:9;display:flex;align-items:center;gap:16px;padding:10px 20px;background:var(--indigo);border-top:4px solid var(--mari);font-weight:600}
+.listen button{width:48px;height:48px;border-radius:50%;border:3px solid var(--ink);background:var(--mari);font-size:20px;color:var(--ink)}
+@media(max-width:720px){.stage{grid-template-columns:1fr;margin-top:130px}.chai{display:none}.rackwrap{height:260px}.top nav{display:none}}
+</style></head><body>
+<div class="sky">
+ <div class="top"><b style="font-family:'Yatra One';font-size:20px;color:var(--mari)">COMIC GALI</b><nav><span>Library</span><span>Listen</span><span>Submit</span><span>हिन्दी ▾</span></nav><span class="pill">🔈 Stall sound: off</span></div>
+ <svg class="bunting" viewBox="0 0 1200 90" preserveAspectRatio="none"><path d="M0 8 Q300 70 600 8 T1200 8" fill="none" stroke="#1b1530" stroke-width="2"/>
+ <g>
+ <polygon points="60,24 90,28 70,62" fill="#f5a400"/><polygon points="170,40 200,40 185,72" fill="#e4432d"/><polygon points="290,52 320,48 306,80" fill="#0e8c7f"/><polygon points="410,52 440,46 428,78" fill="#f5a400"/><polygon points="520,38 550,28 540,64" fill="#e4432d"/><polygon points="660,20 690,28 672,58" fill="#0e8c7f"/><polygon points="770,38 800,44 782,72" fill="#f5a400"/><polygon points="890,52 920,50 904,80" fill="#e4432d"/><polygon points="1010,50 1040,40 1026,74" fill="#0e8c7f"/><polygon points="1110,28 1140,20 1126,54" fill="#f5a400"/></g></svg>
+ <div class="sign"><h1>COMIC GALI</h1><p>Padho bhi. Suno bhi. — read it, hear it.</p></div>
+ <div class="hang" style="left:6%;top:250px;background:linear-gradient(160deg,#0e8c7f,#2b2d77),radial-gradient(#fff3 1px,transparent 1.5px);animation-delay:-1s">Bandar aur Magarmach</div>
+ <div class="hang" style="left:19%;top:290px;background:linear-gradient(160deg,#e4432d,#7a1fa2);animation-delay:-2s">The Banyan Deer</div>
+ <div class="hang" style="right:19%;top:290px;background:linear-gradient(160deg,#7a1fa2,#f5a400);animation-delay:-3s">Birbal &amp; the Crows</div>
+ <div class="hang" style="right:6%;top:250px;background:linear-gradient(160deg,#2b2d77,#e4432d);animation-delay:-.5s">Tenali Rama</div>
+ <div class="stage">
+  <div class="ticket"><b>Banyan Deer</b>Page 5 of 8 · हिन्दी<div class="bar"><i></i></div></div>
+  <div class="rackwrap"><div class="pole"></div><div class="rack">
+   <div style="transform:rotateY(0) translateZ(95px);background:linear-gradient(#0e8c7f,#2b2d77)">Monkey</div>
+   <div style="transform:rotateY(72deg) translateZ(95px);background:linear-gradient(#e4432d,#f5a400)">Deer</div>
+   <div style="transform:rotateY(144deg) translateZ(95px);background:linear-gradient(#7a1fa2,#2b2d77)">Birbal</div>
+   <div style="transform:rotateY(216deg) translateZ(95px);background:linear-gradient(#f5a400,#e4432d)">Tenali</div>
+   <div style="transform:rotateY(288deg) translateZ(95px);background:linear-gradient(#2b2d77,#0e8c7f)">Soon…</div></div></div>
+  <div class="chai"><div class="cup"></div><br>chai ke saath ☕<br><small>tap a comic · dhak-dhak</small></div>
+ </div>
+ <div style="height:40px"></div>
+</div>
+<div class="ground"></div>
+<section class="shelf"><h2>Folk tales &amp; wit</h2><div class="row">
+ <div class="card"><div class="cover" style="background:linear-gradient(160deg,#0e8c7f,#f5a400)">Bandar aur Magarmach</div><small>Jataka · EN हि த म<br><span class="badge">PUBLIC DOMAIN</span></small></div>
+ <div class="card"><div class="cover" style="background:linear-gradient(160deg,#e4432d,#2b2d77)">The Banyan Deer</div><small>Jataka · EN हि বা<br><span class="badge">PUBLIC DOMAIN</span></small></div>
+ <div class="card"><div class="cover" style="background:linear-gradient(160deg,#7a1fa2,#f5a400)">Birbal &amp; the Crows</div><small>Akbar–Birbal · EN हि ગુ<br><span class="badge">PUBLIC DOMAIN</span></small></div>
+ <div class="card"><div class="cover" style="background:linear-gradient(160deg,#2b2d77,#e4432d)">Tenali &amp; the Thieves</div><small>Tenali Rama · EN हि తె ಕ<br><span class="badge">PUBLIC DOMAIN</span></small></div></div>
+<h2 style="margin-top:14px">Soon at the stall</h2><div class="row soon">
+ <div class="card"><div class="cover" style="background:#e4432d">Chacha Chaudhary</div><small>Diamond Comics<br><span class="badge l">NEEDS LICENCE</span></small></div>
+ <div class="card"><div class="cover" style="background:#1b5e20">Nagraj</div><small>Raj Comics<br><span class="badge l">NEEDS LICENCE</span></small></div>
+ <div class="card"><div class="cover" style="background:#e4432d">Amar Chitra Katha</div><small>ACK Media<br><span class="badge l">NEEDS LICENCE</span></small></div>
+ <div class="card"><div class="cover" style="background:#0e8c7f">Tinkle</div><small>ACK Media<br><span class="badge l">NEEDS LICENCE</span></small></div>
+ <div class="card"><div class="cover" style="background:#f5a400">Champak</div><small>Delhi Press<br><span class="badge l">NEEDS LICENCE</span></small></div></div></section>
+<div class="listen"><button>▶</button><span>Listening · Banyan Deer · panel 5/8</span><span style="margin-left:auto">1.0× · Sleep 20m · Driving mode</span></div>
+</body></html>

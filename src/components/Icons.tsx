@@ -1,0 +1,18 @@
+const base = { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true } as const;
+export const Sun = () => <svg {...base}><circle cx="12" cy="12" r="4" /><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" /></svg>;
+export const Moon = () => <svg {...base}><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" /></svg>;
+export const Play = ({ s = 22 }: { s?: number }) => <svg width={s} height={s} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12-7.5z" /></svg>;
+export const Pause = ({ s = 22 }: { s?: number }) => <svg width={s} height={s} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" /><rect x="13.5" y="5" width="4.5" height="14" /></svg>;
+export const Left = () => <svg {...base}><path d="M15 5l-7 7 7 7" /></svg>;
+export const Right = () => <svg {...base}><path d="M9 5l7 7-7 7" /></svg>;
+export const Search = () => <svg {...base}><circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" /></svg>;
+export const Bookmark = () => <svg {...base}><path d="M7 4h10v16l-5-4-5 4z" /></svg>;
+export const Heart = () => <svg {...base}><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" /></svg>;
+export const Plus = () => <svg {...base}><path d="M12 5v14M5 12h14" /></svg>;
+export const Minus = () => <svg {...base}><path d="M5 12h14" /></svg>;
+export const Speaker = () => <svg {...base}><path d="M4 9v6h4l5 4V5L8 9H4z" /><path d="M16.5 8.5a5 5 0 0 1 0 7" /></svg>;
+export const Mute = () => <svg {...base}><path d="M4 9v6h4l5 4V5L8 9H4z" /><path d="M17 9l4 6M21 9l-4 6" /></svg>;
+export const Type = () => <svg {...base}><path d="M5 7V5h14v2M12 5v14M9 19h6" /></svg>;
+export const Skip = () => <svg {...base}><path d="M6 5v14l9-7zM18 5v14" /></svg>;
+export const SkipBack = () => <svg {...base}><path d="M18 5v14l-9-7zM6 5v14" /></svg>;
+export const Close = () => <svg {...base}><path d="M6 6l12 12M18 6L6 18" /></svg>;
