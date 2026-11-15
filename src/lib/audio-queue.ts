@@ -11,6 +11,8 @@ export interface QueueItem {
   rate: number;
   voice?: 'f' | 'm' | 'any';
   audioUrl?: string;
+  /** For a whole-story recording: play only this slice (seconds) of `audioUrl`. */
+  segment?: { start: number; end?: number };
   lang: Lang;
 }
 
@@ -18,7 +20,10 @@ export interface QueueItem {
 export interface SpeechEngine {
   speak(item: QueueItem, rateMultiplier: number): Promise<void>;
   cancel(): void;
+  /** Optional: warm the cache for upcoming recorded clips so playback is gapless. */
+  preload?(items: QueueItem[]): void;
 }
+export type Source = 'file' | 'device' | null;
 
 export type QueueStatus = 'idle' | 'playing' | 'paused' | 'ended';
 export interface QueueState {
@@ -26,10 +31,24 @@ export interface QueueState {
   panel: number;
   lineId: string | null;
   sleepEndsAt: number | null;
+  /** What is producing sound for the current line: a recorded/generated file or the device's own voice. */
+  source: Source;
 }
 
 export function buildQueue(story: Story, lang: Lang): QueueItem[] {
   const items: QueueItem[] = [];
+  const whole = story.audioWhole?.[lang];
+  if (whole && whole.marks.length) {
+    // one long recording: one queue item per panel, each a slice of the same file
+    story.panels.forEach((p, panel) => {
+      const lines = p.lines.filter((l) => l.kind !== 'sfx');
+      const m = whole.marks.find((x) => x.panel === panel); if (!m || !lines.length) return;
+      const next = whole.marks.find((x) => x.panel > panel);
+      items.push({ panel, lineId: lines[0].id, text: lines.map((l) => l.text[lang] ?? l.text.en ?? '').join(' '), kind: 'narration', pitch: 1, rate: 1,
+        audioUrl: whole.url, segment: { start: m.t, end: next?.t }, lang });
+    });
+    return items;
+  }
   story.panels.forEach((p, panel) => {
     for (const l of p.lines) {
       if (l.kind === 'sfx') continue; // sound effects are not narrated
@@ -47,6 +66,8 @@ export function buildQueue(story: Story, lang: Lang): QueueItem[] {
 
 export interface QueueOptions {
   autoAdvance?: boolean; // keep going across panels (driving mode)
+  gapMs?: { line: number; panel: number }; // natural pause after a line / a longer breath at a panel boundary
+  preloadAhead?: number; // how many upcoming recorded clips to warm (default 2)
   now?: () => number;
   setTimer?: (fn: () => void, ms: number) => unknown;
   clearTimer?: (h: unknown) => void;
@@ -58,7 +79,10 @@ export class AudioQueue {
   private rate = 1;
   private auto: boolean;
   private sleepHandle: unknown = null;
-  state: QueueState = { status: 'idle', panel: 0, lineId: null, sleepEndsAt: null };
+  private gapHandle: unknown = null;
+  private gap: { line: number; panel: number };
+  private ahead: number;
+  state: QueueState = { status: 'idle', panel: 0, lineId: null, sleepEndsAt: null, source: null };
   private listeners = new Set<(s: QueueState) => void>();
   private now: () => number;
   private setTimer: (fn: () => void, ms: number) => unknown;
@@ -66,6 +90,8 @@ export class AudioQueue {
 
   constructor(private items: QueueItem[], private engine: SpeechEngine, opts: QueueOptions = {}) {
     this.auto = opts.autoAdvance ?? true;
+    this.gap = opts.gapMs ?? { line: 0, panel: 0 };
+    this.ahead = opts.preloadAhead ?? 2;
     this.now = opts.now ?? Date.now;
     this.setTimer = opts.setTimer ?? ((fn, ms) => setTimeout(fn, ms));
     this.clearTimer = opts.clearTimer ?? ((h) => clearTimeout(h as ReturnType<typeof setTimeout>));
@@ -88,7 +114,7 @@ export class AudioQueue {
   }
   pause() {
     if (this.state.status !== 'playing') return;
-    this.token++; this.engine.cancel();
+    this.token++; this.engine.cancel(); this.clearGap();
     this.emit({ status: 'paused' });
   }
   toggle() { this.state.status === 'playing' ? this.pause() : this.play(); }
@@ -97,7 +123,7 @@ export class AudioQueue {
   seekPanel(panel: number) {
     const idx = this.items.findIndex((it) => it.panel >= panel);
     const wasPlaying = this.state.status === 'playing';
-    this.token++; this.engine.cancel();
+    this.token++; this.engine.cancel(); this.clearGap();
     this.i = idx === -1 ? this.items.length - 1 : idx;
     const it = this.items[this.i];
     this.emit({ panel: it?.panel ?? panel, lineId: wasPlaying ? it?.lineId ?? null : null, status: wasPlaying ? 'playing' : this.state.status === 'ended' ? 'paused' : this.state.status });
@@ -120,15 +146,22 @@ export class AudioQueue {
     this.sleepHandle = this.setTimer(() => { this.sleepHandle = null; this.pause(); this.emit({ sleepEndsAt: null }); }, minutes * 60000);
   }
 
-  dispose() { this.token++; this.engine.cancel(); if (this.sleepHandle != null) this.clearTimer(this.sleepHandle); this.listeners.clear(); }
+  private clearGap() { if (this.gapHandle != null) { this.clearTimer(this.gapHandle); this.gapHandle = null; } }
+  dispose() { this.token++; this.engine.cancel(); this.clearGap(); if (this.sleepHandle != null) this.clearTimer(this.sleepHandle); this.listeners.clear(); }
 
   private async run(tok: number) {
     while (tok === this.token && this.i < this.items.length) {
       const it = this.items[this.i];
-      this.emit({ panel: it.panel, lineId: it.lineId });
+      this.emit({ panel: it.panel, lineId: it.lineId, source: it.audioUrl ? 'file' : 'device' });
+      this.engine.preload?.(this.items.slice(this.i + 1, this.i + 1 + this.ahead).filter((x) => x.audioUrl));
       try { await this.engine.speak(it, this.rate); } catch { /* engine errors end this line */ }
       if (tok !== this.token) return; // paused / seeked while speaking
       const next = this.items[this.i + 1];
+      const pause = next && next.panel !== it.panel ? this.gap.panel : this.gap.line;
+      if (next && pause > 0) {
+        await new Promise<void>((res) => { this.gapHandle = this.setTimer(() => { this.gapHandle = null; res(); }, pause / this.rate); });
+        if (tok !== this.token) return;
+      }
       this.i++;
       if (!next) { this.emit({ status: 'ended', lineId: null }); return; }
       if (!this.auto && next.panel !== it.panel) {

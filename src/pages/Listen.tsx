@@ -3,11 +3,13 @@ import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { Cover } from '../components/Cover';
 import { Driving } from '../components/Driving';
 import { Pause, Play } from '../components/Icons';
-import { useCatalog, useStory } from '../lib/data';
+import { useAudioMeta, useCatalog, useStory } from '../lib/data';
 import { LANG_NAMES, useI18n } from '../lib/i18n';
 import { getPosition } from '../lib/storage';
 import { useListen } from '../lib/useListen';
 import type { Lang } from '../types';
+
+const VOICE_TIP = 'Your device only has a basic voice for this language. For a more natural one: in Edge or Chrome pick an “Online (Natural)” voice; on iPhone/Mac install an Enhanced voice in Settings → Accessibility → Spoken Content → Voices; on Android install Google Text-to-speech voice data.';
 
 export function Listen() {
   const { id = '' } = useParams();
@@ -19,7 +21,8 @@ export function Listen() {
   const langs = story?.langs ?? [];
   const pref = (sp.get('lang') as Lang) || (getPosition(id)?.lang as Lang) || (ui !== 'en' && langs.includes('hi') ? 'hi' : 'en');
   const lang: Lang = langs.includes(pref) ? pref : langs[0] ?? 'en';
-  const L = useListen(story, lang, true);
+  const meta = useAudioMeta();
+  const L = useListen(story, lang, true, { title: item?.title[lang] ?? item?.title.en, artist: 'Comic Gali' });
   const [drive, setDrive] = useState(false);
   const activeRef = useRef<HTMLParagraphElement>(null);
 
@@ -63,6 +66,9 @@ export function Listen() {
             <label className="sr-only" htmlFor="rate">{t('ls.speed')}</label>
             <select id="rate" className="sel" value={L.rate} onChange={(e) => L.setRate(Number(e.target.value))}>{[0.75, 1, 1.25, 1.5].map((r) => <option key={r} value={r}>{r}×</option>)}</select>
           </div>
+          {L.hasFiles && !meta.reviewed[lang] && <div className="tiny" role="note" style={{ margin: '10px 0 0' }}>AI voice, unreviewed — a native speaker has not yet checked this recording.</div>}
+          {playing && L.state.source === 'device' && <div className="tiny" role="status" style={{ margin: '10px 0 0' }}>Device voice. Recorded audio is not available for this part.</div>}
+          {!L.hasFiles && L.voiceQuality === 'basic' && <div className="vwarn" role="note" style={{ margin: '14px 0 0' }}>{VOICE_TIP}</div>}
           {L.voiceMissing && <div className="vwarn" role="status" style={{ margin: '14px 0 0' }}>{t('ls.novoice')}</div>}
           {!L.supported && <div className="vwarn" role="status" style={{ margin: '14px 0 0' }}>{t('ls.nospeech')}</div>}
 

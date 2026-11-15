@@ -1,0 +1,27 @@
+{
+  "_note": "Voice casting for scripts/generate-audio.mjs. Speaker names are Indic Parler-TTS named speakers from its model card (checked 2026-11-15). Languages without an entry (Punjabi: only 'unofficial support' on the card) stay on browser speech.",
+  "models": {
+    "parler": { "id": "ai4bharat/indic-parler-tts", "license": "Apache-2.0", "licenseVerified": "2026-11-15", "source": "https://huggingface.co/ai4bharat/indic-parler-tts" },
+    "piper": { "id": "rhasspy/piper-voices", "license": "MIT (repo level; per-voice licences NOT yet verified)", "licenseVerified": null, "source": "https://huggingface.co/rhasspy/piper-voices",
+      "voices": { "hi": "hi_IN-pratham-medium", "ml": "ml_IN-meera-medium" } }
+  },
+  "languages": {
+    "en": { "cast": { "narrator": "Mary", "male": "Thoma", "female": "Mary", "child": "Swapna", "elder": "Dinesh", "trickster": "Jatin" } },
+    "hi": { "cast": { "narrator": "Divya", "male": "Rohit", "female": "Divya", "child": "Rani", "elder": "Aman", "trickster": "Aman" } },
+    "ta": { "cast": { "narrator": "Jaya", "male": "Jaya", "female": "Kavitha", "child": "Kavitha", "elder": "Jaya", "trickster": "Kavitha" }, "_note": "The card lists only female Tamil speakers; male characters are approximated by style." },
+    "te": { "cast": { "narrator": "Lalitha", "male": "Prakash", "female": "Lalitha", "child": "Kiran", "elder": "Prakash", "trickster": "Kiran" } },
+    "bn": { "cast": { "narrator": "Aditi", "male": "Arjun", "female": "Aditi", "child": "Riya", "elder": "Tapan", "trickster": "Arnav" } },
+    "mr": { "cast": { "narrator": "Sunita", "male": "Sanjay", "female": "Sunita", "child": "Isha", "elder": "Nikhil", "trickster": "Varun" } },
+    "gu": { "cast": { "narrator": "Neha", "male": "Yash", "female": "Neha", "child": "Neha", "elder": "Yash", "trickster": "Yash" }, "_note": "Only two Gujarati speakers exist." },
+    "kn": { "cast": { "narrator": "Anu", "male": "Suresh", "female": "Anu", "child": "Vidya", "elder": "Chetan", "trickster": "Suresh" } },
+    "ml": { "cast": { "narrator": "Anjali", "male": "Harish", "female": "Anjali", "child": "Anju", "elder": "Harish", "trickster": "Harish" } }
+  },
+  "castings": {
+    "monkey-crocodile": { "monkey": "trickster", "crocodile": "elder" },
+    "lion-hare": { "lion": "elder", "hare": "trickster" },
+    "blue-jackal": { "jackal": "trickster" },
+    "tenali-thieves": { "tenali": "trickster" }
+  },
+  "settings": { "sentencePauseMs": 260, "codec": "mp3", "bitrateK": 48, "sampleRate": 24000, "targetLufs": -16 },
+  "budget": { "maxTotalMB": 100, "_note": "Cloudflare Pages: 20,000 files and 25 MiB per file on the free plan; keep well under." }
+}

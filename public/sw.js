@@ -26,6 +26,18 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.pathname.startsWith('/api/')) return; // API calls always go to the network (auth, moderation, signed URLs)
+  if (req.headers.has('range') && /\.(mp3|m4a|ogg|opus|webm|wav)$/i.test(url.pathname)) { // <audio> asks for byte ranges; Safari rejects a full 200 reply
+    e.respondWith((async () => {
+      const hit = (await caches.open(PACKS).then((c) => c.match(url.pathname))) || (await caches.match(url.pathname));
+      if (!hit) return fetch(req).catch(() => new Response('', { status: 504 }));
+      const buf = await hit.arrayBuffer();
+      const m = /bytes=(\d*)-(\d*)/.exec(req.headers.get('range') || '') || [];
+      const start = m[1] ? parseInt(m[1], 10) : 0;
+      const end = m[2] ? Math.min(parseInt(m[2], 10), buf.byteLength - 1) : buf.byteLength - 1;
+      return new Response(buf.slice(start, end + 1), { status: 206, headers: { 'Content-Type': hit.headers.get('Content-Type') || 'audio/mpeg', 'Content-Range': `bytes ${start}-${end}/${buf.byteLength}`, 'Content-Length': String(end - start + 1), 'Accept-Ranges': 'bytes' } });
+    })());
+    return;
+  }
   if (req.mode === 'navigate') {
     e.respondWith(fetch(req).then((r) => { caches.open(SHELL).then((c) => c.put('/', r.clone())); return r; }).catch(() => caches.match('/')));
     return;

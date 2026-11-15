@@ -76,3 +76,43 @@ describe('AudioQueue', () => {
     expect(q.state.sleepEndsAt).toBeNull();
   });
 });
+
+describe('preload, gaps, source and whole recordings', () => {
+  class Spy extends Fake { preloaded: string[][] = []; preload(items: QueueItem[]) { this.preloaded.push(items.map((i) => i.lineId)); } }
+  const withAudio: Story = { ...story, panels: story.panels.map((p) => ({ ...p, lines: p.lines.map((l) => ({ ...l, audio: { en: `/a/${l.id}.mp3` } })) })) };
+
+  it('preloads the next two recorded clips before each line', async () => {
+    const e = new Spy(); const q = new AudioQueue(buildQueue(withAudio, 'en'), e);
+    q.play();
+    expect(e.preloaded[0]).toEqual(['p1l3', 'p2l1']);
+    await e.finish();
+    expect(e.preloaded[1]).toEqual(['p2l1', 'p3l1']);
+  });
+  it('does not preload lines without a file (device voice)', () => {
+    const e = new Spy(); const q = new AudioQueue(buildQueue(story, 'en'), e); q.play();
+    expect(e.preloaded[0]).toEqual(['p1l3']); // only the one with a recording
+  });
+  it('reports file vs device source per line', async () => {
+    const e = new Fake(); const q = new AudioQueue(buildQueue(story, 'en'), e);
+    q.play(); expect(q.state.source).toBe('device');
+    await e.finish(); expect(q.state.source).toBe('file'); // p1l3 has a recording
+  });
+  it('waits a longer breath at panel boundaries than between lines, and cancels the wait on pause', async () => {
+    const timers: { fn: () => void; ms: number }[] = [];
+    const e = new Fake();
+    const q = new AudioQueue(buildQueue(story, 'en'), e, { gapMs: { line: 100, panel: 500 }, setTimer: (fn, ms) => { timers.push({ fn, ms }); return timers.length; }, clearTimer: () => undefined });
+    q.play(); await e.finish();                 // p1l1 -> p1l3: same panel
+    expect(timers.at(-1)!.ms).toBe(100);
+    timers.at(-1)!.fn(); await Promise.resolve(); await Promise.resolve();
+    await e.finish();                           // p1l3 -> p2l1: panel boundary
+    expect(timers.at(-1)!.ms).toBe(500);
+    q.pause(); timers.at(-1)!.fn(); await Promise.resolve(); await Promise.resolve();
+    expect(e.spoken).toEqual(['p1l1', 'p1l3']); // paused during the breath: nothing more spoken
+  });
+  it('builds one slice per panel from a whole-story recording', () => {
+    const s: Story = { ...story, audioWhole: { en: { url: '/w.mp3', marks: [{ panel: 0, t: 0 }, { panel: 1, t: 12.5 }, { panel: 2, t: 20 }] } } };
+    const items = buildQueue(s, 'en');
+    expect(items.map((i) => i.segment)).toEqual([{ start: 0, end: 12.5 }, { start: 12.5, end: 20 }, { start: 20, end: undefined }]);
+    expect(items.every((i) => i.audioUrl === '/w.mp3')).toBe(true);
+  });
+});

@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Lang, Story } from '../types';
 import { AudioQueue, buildQueue, type QueueState } from './audio-queue';
-import { BrowserEngine, hasVoice, speechSupported } from './speech';
+import { BrowserEngine, speechSupported, voiceQuality } from './speech';
 
-export function useListen(story: Story | null, lang: Lang, initialAuto = true) {
-  const [state, setState] = useState<QueueState>({ status: 'idle', panel: 0, lineId: null, sleepEndsAt: null });
+const GAPS = { line: 280, panel: 750 }; // natural pause after a line, longer breath between panels
+
+export function useListen(story: Story | null, lang: Lang, initialAuto = true, meta?: { title?: string; artist?: string }) {
+  const [state, setState] = useState<QueueState>({ status: 'idle', panel: 0, lineId: null, sleepEndsAt: null, source: null });
   const [rate, setRateState] = useState(1);
   const [auto, setAutoState] = useState(initialAuto);
   const [voiceTick, setVoiceTick] = useState(0);
@@ -21,13 +23,30 @@ export function useListen(story: Story | null, lang: Lang, initialAuto = true) {
 
   useEffect(() => {
     if (!story) return;
-    const q = new AudioQueue(buildQueue(story, lang), new BrowserEngine(), { autoAdvance: autoRef.current });
+    const engine = new BrowserEngine();
+    const q = new AudioQueue(buildQueue(story, lang), engine, { autoAdvance: autoRef.current, gapMs: GAPS });
+    engine.onSource = (s) => setState((cur) => (cur.source === s ? cur : { ...cur, source: s })); // a failed file falls back to the device voice
     q.setRate(rateRef.current);
     qRef.current = q;
     setState(q.state);
     const off = q.subscribe(setState);
     return () => { off(); q.dispose(); qRef.current = null; };
   }, [story, lang]);
+
+  // Lock-screen / headset controls and background play (Media Session API).
+  useEffect(() => {
+    const ms = typeof navigator !== 'undefined' ? navigator.mediaSession : undefined;
+    if (!ms || !story) return;
+    try {
+      if (typeof MediaMetadata !== 'undefined') ms.metadata = new MediaMetadata({ title: meta?.title ?? story.id, artist: meta?.artist ?? 'Comic Gali' });
+      ms.setActionHandler('play', () => qRef.current?.play());
+      ms.setActionHandler('pause', () => qRef.current?.pause());
+      ms.setActionHandler('nexttrack', () => qRef.current?.nextPanel());
+      ms.setActionHandler('previoustrack', () => qRef.current?.prevPanel());
+    } catch { /* unsupported action */ }
+    return () => { try { (['play', 'pause', 'nexttrack', 'previoustrack'] as const).forEach((a) => ms.setActionHandler(a, null)); } catch { /* ignore */ } };
+  }, [story, meta?.title, meta?.artist]);
+  useEffect(() => { if (navigator.mediaSession) navigator.mediaSession.playbackState = state.status === 'playing' ? 'playing' : 'paused'; }, [state.status]);
 
   const setRate = useCallback((r: number) => { rateRef.current = r; setRateState(r); qRef.current?.setRate(r); }, []);
   const setAuto = useCallback((a: boolean) => { autoRef.current = a; setAutoState(a); qRef.current?.setAutoAdvance(a); }, []);
@@ -38,6 +57,7 @@ export function useListen(story: Story | null, lang: Lang, initialAuto = true) {
   }), []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const voiceMissing = useMemo(() => speechSupported() && !hasVoice(lang) && lang !== undefined, [lang, voiceTick]);
-  return { state, rate, setRate, auto, setAuto, supported: speechSupported(), voiceMissing, ...api };
+  const quality = useMemo(() => (speechSupported() ? voiceQuality(lang) : 'none'), [lang, voiceTick]);
+  const hasFiles = useMemo(() => !!story && buildQueue(story, lang).some((i) => i.audioUrl), [story, lang]);
+  return { state, rate, setRate, auto, setAuto, supported: speechSupported(), voiceMissing: speechSupported() && quality === 'none' && !hasFiles, voiceQuality: quality, hasFiles, ...api };
 }

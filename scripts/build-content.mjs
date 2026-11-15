@@ -1,5 +1,5 @@
 // Validates authored stories and writes public/content/stories/*.json + catalog.json
-import { readdirSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -7,6 +7,9 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const outDir = join(root, 'public/content/stories');
 mkdirSync(outDir, { recursive: true });
 let errors = 0;
+// Generated audio (npm run audio) is patched into each line's audio[lang]; authored/human audio is never overwritten.
+const manifestFile = join(root, 'public/audio/manifest.json');
+const audioManifest = existsSync(manifestFile) ? JSON.parse(readFileSync(manifestFile, 'utf8')) : { entries: {} };
 const fail = (m) => { console.error('✗', m); errors++; };
 
 const files = readdirSync(join(root, 'content-src/stories')).filter((f) => f.endsWith('.mjs'));
@@ -21,6 +24,10 @@ for (const f of files) {
       l.id = `${p.id}l${j + 1}`;
       if (l.speaker && !mod.characters[l.speaker]) fail(`${mod.id}/${l.id}: unknown speaker ${l.speaker}`);
       for (const lang of mod.langs) if (!l.text[lang]) fail(`${mod.id}/${l.id}: missing ${lang}`);
+      for (const lang of mod.langs) {
+        const e = audioManifest.entries[`${mod.id}/${lang}/${l.id}`];
+        if (e && !l.audio?.[lang] && existsSync(join(root, 'public/audio', mod.id, lang, e.file))) (l.audio ??= {})[lang] = `/audio/${mod.id}/${lang}/${e.file}`;
+      }
     });
     for (const lang of mod.langs) if (!p.alt[lang]) fail(`${mod.id}/${p.id}: missing alt ${lang}`);
   });

@@ -5,7 +5,7 @@ import { CoverCard } from '../components/CoverCard';
 import { Bookmark } from '../components/Icons';
 import { useCatalog } from '../lib/data';
 import { LANG_NAMES, useI18n } from '../lib/i18n';
-import { hasPack, offlineSupported, removePack, savePack } from '../lib/offline';
+import { formatBytes, hasPack, offlineSupported, packSize, removePack, savePack } from '../lib/offline';
 import { getFavs, getPosition, load, save, toggleFav } from '../lib/storage';
 
 const RIGHTS_LABEL: Record<string, string> = { public_domain: 'Public domain', open_license: 'Open licence', creator_submitted: 'Creator submitted', needs_license: 'Needs licence' };
@@ -64,7 +64,7 @@ export function Title() {
                 <Link to={`/read/${id}`} className="pri dhak">{pos ? `${t('continue')} · ${t('panel')} ${pos.index + 1}` : t('cta.read')}</Link>
                 <Link to={`/listen/${id}`} className="sec dhak">{t('cta.listen')}</Link>
                 <button className="sec dhak" type="button" aria-pressed={fav} onClick={() => setFav(toggleFav(id).includes(id))}><Bookmark />{fav ? t('title.faved') : t('title.fav')}</button>
-                {offlineSupported() && <button className="sec dhak" type="button" onClick={togglePack} disabled={busy}>{pack ? t('title.offline.done') : t('title.offline')}</button>}
+                {offlineSupported() && <button className="sec dhak" type="button" onClick={togglePack} disabled={busy}>{pack ? `${t('title.offline.done')} (${formatBytes(packSize(id))})` : t('title.offline')}</button>}
               </div>
 
               <div className="sub-h"><h2 className="h2 sm">{t('title.langs')}</h2></div>

@@ -1,0 +1,13 @@
+export const hashKey: (...parts: unknown[]) => string;
+export const numberToWordsEn: (n: number) => string;
+export const applyLexicon: (t: string, lex?: Record<string, string>) => string;
+export const normalizeText: (t: string, lang: string, lex?: Record<string, string>) => string;
+export const splitSentences: (t: string, max?: number) => string[];
+export const STYLES: Record<string, string>;
+export const archetypeFor: (story: any, charId: string | undefined, castings?: any) => string;
+export const castLine: (story: any, line: any, lang: string, voices: any, castings?: any) => { speaker: string; description: string; archetype: string } | null;
+export const planJobs: (story: any, lang: string, o: any) => { hash: string; file: string; text: string; speaker: string; lineId: string; lastInPanel: boolean; archetype: string; description: string }[];
+export const parseWav: (b: Buffer) => { rate: number; channels: number; pcm: Buffer };
+export const wavFrom: (pcm: Buffer, rate: number, channels?: number) => Buffer;
+export const joinWithPauses: (wavs: Buffer[], pauseMs: number) => Buffer;
+export const wavDurationMs: (w: Buffer) => number;

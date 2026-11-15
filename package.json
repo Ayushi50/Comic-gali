@@ -13,7 +13,10 @@
     "test": "vitest run",
     "lint": "tsc --noEmit",
     "publish:content": "node scripts/publish-content.mjs",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "audio": "node scripts/generate-audio.mjs",
+    "audio:compare": "node scripts/generate-audio.mjs --compare",
+    "check:audio": "node scripts/check-audio.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",

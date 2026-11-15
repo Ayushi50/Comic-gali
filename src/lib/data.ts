@@ -33,3 +33,9 @@ export function useStory(id: string | undefined) {
   }, [id]);
   return { story: s, error };
 }
+
+/** Generated-audio manifest (written by `npm run audio`). Missing file = no generated audio. */
+export interface AudioMeta { reviewed: Record<string, string>; bytes?: number }
+let metaP: Promise<AudioMeta> | null = null;
+export const loadAudioMeta = () => (metaP ??= fetch(`${base}/audio/manifest.json`).then((r) => (r.ok && (r.headers.get('content-type') ?? '').includes('json') ? r.json() : { reviewed: {} })).catch(() => ({ reviewed: {} })));
+export function useAudioMeta(): AudioMeta { const [m, setM] = useState<AudioMeta>({ reviewed: {} }); useEffect(() => { void loadAudioMeta().then(setM); }, []); return m; }
