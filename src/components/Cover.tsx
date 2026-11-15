@@ -16,9 +16,10 @@ interface Props {
   soon?: string; // label text when the title is not yet licensed
   variant?: number;
   className?: string;
+  image?: string; // creator-submitted cover (first page)
 }
 
-export function Cover({ id, title, tag = 'KAHANI', soon, variant, className }: Props) {
+export function Cover({ id, title, tag = 'KAHANI', soon, variant, className, image }: Props) {
   const v = variant ?? hashId(id) % VARIANTS.length;
   const { bg, on } = VARIANTS[v];
   const style = { '--cb': `var(--${bg})`, '--on': `var(--${on})` } as CSSProperties;
@@ -40,6 +41,7 @@ export function Cover({ id, title, tag = 'KAHANI', soon, variant, className }: P
         <div className="sh" aria-hidden="true" style={{ left: '36%', top: '15%', width: '46%', aspectRatio: '1', borderRadius: '50%', background: 'var(--cb)' }} />
         <div className="sh" aria-hidden="true" style={{ right: '18%', top: '52%', width: '4%', aspectRatio: '1', borderRadius: '50%', background: 'currentColor' }} />
       </>}
+      {image && <img src={image} alt="" loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />}
       <div className="cl"><span>COMIC GALI</span><span>{tag}</span></div>
       {soon && <div className="lock" aria-hidden="true">{soon}</div>}
       <div className="ct">{title}</div>

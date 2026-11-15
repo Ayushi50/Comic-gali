@@ -1,13 +1,19 @@
 import { useEffect, useState } from 'react';
 import type { Catalog, CatalogItem, Story } from '../types';
+import { API_ON, api, apiUrl } from './api';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 let catalogP: Promise<Catalog> | null = null;
 const storyP = new Map<string, Promise<Story>>();
 
-export const loadCatalog = () => (catalogP ??= fetch(`${base}/content/catalog.json`).then((r) => { if (!r.ok) throw new Error('catalog'); return r.json(); }));
+export const loadCatalog = () => (catalogP ??= fetch(`${base}/content/catalog.json`).then((r) => { if (!r.ok) throw new Error('catalog'); return r.json() as Promise<Catalog>; }).then(async (c) => {
+  if (!API_ON) return c;
+  // API-published (creator) titles are added to the static catalog; the API being down never breaks the site.
+  const extra = await api<{ items: CatalogItem[] }>('/api/catalog').then((r) => r.items).catch(() => [] as CatalogItem[]);
+  return { ...c, items: [...c.items, ...extra.filter((e) => !c.items.some((i) => i.id === e.id))] };
+}));
 export const loadStory = (id: string) => {
-  if (!storyP.has(id)) storyP.set(id, fetch(`${base}/content/stories/${id}.json`).then((r) => { if (!r.ok) throw new Error('story'); return r.json(); }));
+  if (!storyP.has(id)) storyP.set(id, fetch(`${base}/content/stories/${id}.json`).then((r) => { if (r.ok && (r.headers.get('content-type') ?? '').includes('json')) return r.json(); if (API_ON) return fetch(apiUrl(`/api/stories/${id}`)).then((x) => { if (!x.ok) throw new Error('story'); return x.json(); }); throw new Error('story'); }));
   return storyP.get(id)!;
 };
 export const storyUrl = (id: string) => `${base}/content/stories/${id}.json`;

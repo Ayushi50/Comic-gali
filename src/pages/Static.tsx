@@ -3,34 +3,45 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useCatalog } from '../lib/data';
 import { useI18n } from '../lib/i18n';
 import { load, save } from '../lib/storage';
+import { API_ON, ApiError, api, useConfig } from '../lib/api';
+import { Turnstile } from '../components/Turnstile';
 
-/** Takedown contact: replace with your real address before launch (see MORNING_REPORT.md). */
-const TAKEDOWN_EMAIL = 'takedown@comicgali.example';
+/** Takedown contact comes from config: VITE_TAKEDOWN_EMAIL at build time, or /api/config (TAKEDOWN_EMAIL) when the API is on. */
+const BUILD_TAKEDOWN_EMAIL = (import.meta.env.VITE_TAKEDOWN_EMAIL as string | undefined) || '';
 
 export function Static({ page }: { page: 'takedown' | 'sources' | '404' }) {
   const { t, pick } = useI18n();
   const { items } = useCatalog();
   const [sp] = useSearchParams();
   const [sent, setSent] = useState(false);
+  const cfg = useConfig();
+  const TAKEDOWN_EMAIL = cfg?.takedownEmail || BUILD_TAKEDOWN_EMAIL;
+  const [ts, setTs] = useState(''); const [err, setErr] = useState('');
   const [form, setForm] = useState({ title: sp.get('title') ?? '', name: '', email: '', reason: '', good: false });
 
   if (page === '404') return <div className="wrap"><div className="empty">{t('nf')} <Link to="/" className="lnk ul">Home</Link></div></div>;
 
   if (page === 'takedown') {
-    const submit = (e: FormEvent) => {
-      e.preventDefault();
+    const submit = async (e: FormEvent) => {
+      e.preventDefault(); setErr('');
+      if (API_ON) {
+        try { await api('/api/takedown', { method: 'POST', body: JSON.stringify({ ...form, 'cf-turnstile-response': ts }) }); setSent(true); }
+        catch (x) { setErr(x instanceof ApiError ? x.message : 'Could not send. Please email us instead.'); }
+        return;
+      }
       save('cg:takedowns', [...load<unknown[]>('cg:takedowns', []), { ...form, at: new Date().toISOString() }]);
       setSent(true);
     };
-    const mail = `mailto:${TAKEDOWN_EMAIL}?subject=${encodeURIComponent('Takedown request: ' + form.title)}&body=${encodeURIComponent(`${form.reason}\n\n— ${form.name} (${form.email})`)}`;
+    const mail = `mailto:${TAKEDOWN_EMAIL || ''}?subject=${encodeURIComponent('Takedown request: ' + form.title)}&body=${encodeURIComponent(`${form.reason}\n\n— ${form.name} (${form.email})`)}`;
     return (
       <div className="wrap" style={{ paddingBottom: 60 }}>
         <div className="page-h"><h1>{t('takedown.h')}</h1></div>
         <div className="prose" style={{ marginTop: 24 }}>
           <p>If you own the rights to something shown on Comic Gali and did not agree to it being here, tell us. We take the title down first and ask questions after. Content that is public domain, openly licensed, or submitted by its creator is credited on its page; a credit or licence that is wrong is also a reason to write.</p>
           {sent ? (
-            <div className="panelbox"><p style={{ margin: 0 }}><b>Request noted on this device.</b> This prototype has no server yet, so to deliver it please also send it by email:</p>
-              <p><a className="pri sm" href={mail}>Open email draft</a></p></div>
+            API_ON ? <div className="panelbox" role="status"><p style={{ margin: 0 }}><b>Thank you — your request was received.</b> A moderator will review it and we will email you.</p></div> :
+            <div className="panelbox"><p style={{ margin: 0 }}><b>Request noted on this device.</b> No server is configured, so to deliver it please also send it by email:</p>
+              {TAKEDOWN_EMAIL ? <p><a className="pri sm" href={mail}>Open email draft</a></p> : <p className="help">No takedown address is configured yet (set VITE_TAKEDOWN_EMAIL).</p>}</div>
           ) : (
             <form onSubmit={submit} className="panelbox" style={{ display: 'grid', gap: 16 }}>
               <div><label className="lbl" htmlFor="tt">Title concerned</label>
@@ -39,10 +50,12 @@ export function Static({ page }: { page: 'takedown' | 'sources' | '404' }) {
                 <div><label className="lbl" htmlFor="te">Email</label><input id="te" className="inp" type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div></div>
               <div><label className="lbl" htmlFor="tr">What is the problem?</label><textarea id="tr" className="inp" required value={form.reason} onChange={(e) => setForm({ ...form, reason: e.target.value })} /></div>
               <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}><input type="checkbox" required checked={form.good} onChange={(e) => setForm({ ...form, good: e.target.checked })} style={{ marginTop: 4 }} /><span>I am the rights holder, or authorised to act for them, and the information above is accurate.</span></label>
+              <Turnstile siteKey={API_ON ? cfg?.turnstileSiteKey : null} onToken={setTs} />
+              {err && <div role="alert" style={{ color: 'var(--c2)', fontWeight: 600 }}>{err}</div>}
               <div><button className="pri dhak" type="submit">Send request</button></div>
             </form>
           )}
-          <p className="help">Direct contact: {TAKEDOWN_EMAIL} (placeholder address until the domain is set up).</p>
+          {TAKEDOWN_EMAIL && <p className="help">Direct contact: <a href={`mailto:${TAKEDOWN_EMAIL}`}>{TAKEDOWN_EMAIL}</a></p>}
         </div>
       </div>
     );

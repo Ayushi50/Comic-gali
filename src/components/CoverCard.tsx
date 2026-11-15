@@ -14,7 +14,7 @@ export function CoverCard({ item }: { item: CatalogItem }) {
   return (
     <div className="cover">
       <Link to={`/title/${item.id}`} className="dhak" style={{ display: 'block' }}>
-        <Cover id={item.id} title={pick(item.title)} tag={soon ? 'COMIC' : 'KAHANI'} soon={soon ? t('soon').toUpperCase() : undefined} />
+        <Cover id={item.id} title={pick(item.title)} tag={soon ? 'COMIC' : 'KAHANI'} image={item.coverImage} soon={soon ? t('soon').toUpperCase() : undefined} />
         <div className="sub">{soon ? (item.publisher ?? t('soon')) : t('readlisten')}</div>
       </Link>
       {!soon && (

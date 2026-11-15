@@ -24,7 +24,10 @@ export interface Position {
 }
 export const posKey = (id: string) => `cg:pos:${id}`;
 export const getPosition = (id: string) => load<Position | null>(posKey(id), null);
-export const setPosition = (id: string, p: Omit<Position, 'at'>) => save(posKey(id), { ...p, at: Date.now() });
+export const setPosition = (id: string, p: Omit<Position, 'at'>) => {
+  save(posKey(id), { ...p, at: Date.now() });
+  if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('cg:pos', { detail: { id, p } }));
+};
 export function recentPositions(): { id: string; pos: Position }[] {
   const out: { id: string; pos: Position }[] = [];
   try {
@@ -45,5 +48,6 @@ export const toggleFav = (id: string): string[] => {
   const f = getFavs();
   const next = f.includes(id) ? f.filter((x) => x !== id) : [...f, id];
   save('cg:favs', next);
+  if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('cg:favs', { detail: { id, on: next.includes(id) } }));
   return next;
 };

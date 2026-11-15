@@ -1,0 +1,14 @@
+name: CI
+on: { push: { branches: [main] }, pull_request: {} }
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: npm }   # node:sqlite (used by backend tests) needs Node 22.5+
+      - run: npm ci
+      - run: npm run content          # validates every story and the catalog
+      - run: npm test
+      - run: npm run build
+      - run: node scripts/check-audio.mjs   # audio manifest + file-size budget

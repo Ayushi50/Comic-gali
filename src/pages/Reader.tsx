@@ -46,6 +46,31 @@ function ScrollPanel({ story, idx, lang, activeLine, onSeen, registerEl }: { sto
   );
 }
 
+/** Creator-submitted comics are uploaded page images: a simple page-by-page viewer with the same listen bar. */
+function ImageReader({ id, story, title }: { id: string; story: Story; title: string }) {
+  const { t } = useI18n();
+  const lang = story.langs[0];
+  const L = useListen(story, lang, true);
+  const [n, setN] = useState(() => Math.min(getPosition(id)?.index ?? 0, story.imagePages!.length - 1));
+  const pages = story.imagePages!;
+  useEffect(() => { setPosition(id, { index: n, lang, mode: 'flip', dir: 'ltr' }); }, [id, n, lang]);
+  const playing = L.state.status === 'playing';
+  return (
+    <div className="rd">
+      <div className="rd-top"><Link to={`/title/${id}`} className="rnd sm" aria-label={t('rd.back')}><Left /></Link><div className="ttl serif" lang={lang}>{title}</div></div>
+      <div className="rd-main">
+        <button type="button" className="rd-btn dhak" onClick={() => setN((x) => Math.max(0, x - 1))} aria-label={t('rd.prev')}><Left /></button>
+        <div className="stage" style={{ display: 'grid', placeItems: 'center', overflow: 'auto' }}><img src={pages[n]} alt={`${title} — ${t('rd.page')} ${n + 1}/${pages.length}`} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} /></div>
+        <button type="button" className="rd-btn dhak" onClick={() => setN((x) => Math.min(pages.length - 1, x + 1))} aria-label={t('rd.next')}><Right /></button>
+      </div>
+      {story.panels.length > 0 && <div className="lbar" role="group" aria-label="Listen">
+        <button type="button" className="pri sm dhak" onClick={L.toggle} aria-label={playing ? t('ls.pause') : t('ls.play')}>{playing ? <Pause s={18} /> : <Play s={18} />}{playing ? t('ls.pause') : t('ls.play')}</button>
+        <div className="grow"><div className="tiny">{t('rd.page')} {n + 1}/{pages.length}</div></div>
+      </div>}
+    </div>
+  );
+}
+
 export default function Reader() {
   const { id = '' } = useParams();
   const [sp] = useSearchParams();
@@ -54,6 +79,7 @@ export default function Reader() {
   const { story, error } = useStory(id);
   if (error) return <div className="wrap"><div className="empty">{t('nf')} <Link to="/library" className="lnk ul">{t('nav.library')}</Link></div></div>;
   if (!story) return <div className="empty">{t('loading')}</div>;
+  if (story.imagePages?.length) return <ImageReader key={id} id={id} story={story} title={pick(items.find((i) => i.id === id)?.title) || id} />;
   return <ReaderInner key={id} id={id} story={story} title={pick(items.find((i) => i.id === id)?.title) || id} initialLang={sp.get('lang')} ui={ui} />;
 }
 
