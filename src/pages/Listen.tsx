@@ -84,6 +84,7 @@ export function Listen() {
             <button type="button" className="chip dhak" onClick={() => { L.setAuto(true); setDrive(true); L.play(); }}>{t('ls.drive')}</button>
           </div>
           <Link to={`/read/${id}?lang=${lang}`} className="lnk ul" style={{ marginTop: 22 }}>{t('ls.asread')}</Link>
+          <p className="help"><Link to={`/review/${id}?lang=${lang}`} className="lnk">Native speaker? Help review this voice →</Link></p>
 
           <div className="sub-h"><h2 className="h2 sm">{t('ls.next')}</h2></div>
           <div className="tiles">{others.map((o) => <Link key={o.id} to={`/listen/${o.id}`} className="tile dhak"><span style={{ display: 'block' }}><b>{pick(o.title)}</b><span>{o.series}</span></span><span style={{ fontSize: 20 }}>→</span></Link>)}</div>

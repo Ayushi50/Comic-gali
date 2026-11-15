@@ -70,10 +70,10 @@ function ApiModeration() {
       ))}
       <div className="page-h" style={{ marginTop: 40 }}><h2>Upload a human recording</h2></div>
       <form onSubmit={upload} className="panelbox" style={{ display: 'grid', gap: 12, maxWidth: 520 }}>
-        <p className="help" style={{ margin: 0 }}>Replaces generated audio. Leave line id empty for a whole-story recording. MP3, M4A, OGG or WebM, up to 3 MB.</p>
+        <p className="help" style={{ margin: 0 }}>Replaces generated audio. One recording per line (language + line id). MP3, M4A, OGG or WebM, up to 3 MB.</p>
         <input className="inp" name="titleId" placeholder="title id, e.g. monkey-crocodile" required pattern="[a-z0-9-]+" />
         <input className="inp" name="lang" placeholder="language code, e.g. hi" required pattern="[a-z]{2}" />
-        <input className="inp" name="lineId" placeholder="line id, e.g. p1l1 (optional)" />
+        <input className="inp" name="lineId" placeholder="line id, e.g. p1l1" required pattern="p[0-9]+l[0-9]+" />
         <input className="inp" style={{ paddingTop: 14 }} name="file" type="file" accept="audio/*" required />
         <div><button className="pri sm dhak" type="submit">Upload</button></div>
       </form>

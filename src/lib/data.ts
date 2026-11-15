@@ -13,9 +13,17 @@ export const loadCatalog = () => (catalogP ??= fetch(`${base}/content/catalog.js
   return { ...c, items: [...c.items, ...extra.filter((e) => !c.items.some((i) => i.id === e.id))] };
 }));
 export const loadStory = (id: string) => {
-  if (!storyP.has(id)) storyP.set(id, fetch(`${base}/content/stories/${id}.json`).then((r) => { if (r.ok && (r.headers.get('content-type') ?? '').includes('json')) return r.json(); if (API_ON) return fetch(apiUrl(`/api/stories/${id}`)).then((x) => { if (!x.ok) throw new Error('story'); return x.json(); }); throw new Error('story'); }));
+  if (!storyP.has(id)) storyP.set(id, fetch(`${base}/content/stories/${id}.json`).then((r) => { if (r.ok && (r.headers.get('content-type') ?? '').includes('json')) return r.json(); if (API_ON) return fetch(apiUrl(`/api/stories/${id}`)).then((x) => { if (!x.ok) throw new Error('story'); return x.json(); }); throw new Error('story'); }).then((st: Story) => withRecordings(id, st)));
   return storyP.get(id)!;
 };
+/** Human recordings uploaded by moderators/creators (API on) replace generated audio for their lines. */
+async function withRecordings(id: string, story: Story): Promise<Story> {
+  if (!API_ON) return story;
+  const r = await api<{ items: { lineId: string | null; lang: string; url: string }[] }>(`/api/recordings/${id}`).catch(() => ({ items: [] }));
+  if (!r.items.length) return story;
+  const by = new Map(r.items.filter((x) => x.lineId).map((x) => [`${x.lineId}/${x.lang}`, x.url]));
+  return { ...story, panels: story.panels.map((p) => ({ ...p, lines: p.lines.map((l) => { const a = { ...(l.audio ?? {}) } as Record<string, string>; for (const lang of story.langs) { const u = by.get(`${l.id}/${lang}`); if (u) a[lang] = u; } return { ...l, audio: a }; }) })) };
+}
 export const storyUrl = (id: string) => `${base}/content/stories/${id}.json`;
 
 export function useCatalog(): { items: CatalogItem[]; ready: boolean; error: boolean } {

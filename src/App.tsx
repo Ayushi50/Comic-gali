@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 const Reader = lazy(() => import('./pages/Reader'));
 const Submit = lazy(() => import('./pages/Submit'));
 const Moderation = lazy(() => import('./pages/Moderation'));
+const Review = lazy(() => import('./pages/Review'));
 
 function ScrollTop() {
   const { pathname } = useLocation();
@@ -34,6 +35,7 @@ export function App() {
             <Route path="listen/:id" element={<Listen />} />
             <Route path="submit" element={<Submit />} />
             <Route path="moderation" element={<Moderation />} />
+            <Route path="review/:id" element={<Review />} />
             <Route path="takedown" element={<Static page="takedown" />} />
             <Route path="sources" element={<Static page="sources" />} />
             <Route path="*" element={<Static page="404" />} />
