@@ -1,0 +1,18 @@
+# Cloudflare Pages project config. Create the resources, then paste the ids (see docs/BACKEND.md).
+name = "comic-gali"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-11-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "comic-gali"
+database_id = "REPLACE_WITH_D1_ID"     # wrangler d1 create comic-gali
+migrations_dir = "migrations"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "comic-gali-files"       # wrangler r2 bucket create comic-gali-files
+
+# Non-secret vars go here; secrets via `wrangler pages secret put NAME`.
+[vars]
+SITE_ORIGIN = "https://comic-gali.pages.dev"

@@ -13,7 +13,16 @@ export interface Line {
   kind: 'narration' | 'speech' | 'thought' | 'sfx';
   speaker?: string; // character id (see Story.characters)
   text: Localized;
-  audio?: Partial<Record<Lang, string>>; // URL of a recorded file for this line
+  audio?: Partial<Record<Lang, string>>; // URL of a recorded or generated file for this line (the single source of truth for the player)
+}
+
+/** One long recording of a whole story with panel timestamps (seconds), used when per-line audio does not fit. */
+export interface AudioWhole {
+  url: string;
+  marks: { panel: number; t: number }[]; // start time of each panel, ascending
+  reader?: string;
+  license?: string;
+  sourceUrl?: string;
 }
 
 export interface Actor {
@@ -47,6 +56,8 @@ export interface Character {
   pitch: number; // 0.5 – 1.8 speech pitch
   rate?: number;
   voice?: 'f' | 'm' | 'any'; // preferred voice gender hint
+  /** Voice casting for the offline neural-TTS generator (scripts/generate-audio.mjs): speaker name + style prompt per language. */
+  voices?: Partial<Record<Lang, { speaker?: string; style?: string }>>;
 }
 
 export interface Credit {
@@ -61,6 +72,10 @@ export interface Story {
   characters: Record<string, Character>;
   pageLayouts: string[]; // one layout key per page
   panels: Panel[];
+  /** Creator-submitted comics: uploaded page images (URLs). The reader shows these instead of drawn scenes. */
+  imagePages?: string[];
+  /** One long recording for the whole story (see AudioWhole). */
+  audioWhole?: Partial<Record<Lang, AudioWhole>>;
 }
 
 export interface CatalogItem {
@@ -83,6 +98,7 @@ export interface CatalogItem {
   sourceName?: string;
   verifiedOn?: string;
   shelf?: string;
+  coverImage?: string;
 }
 
 export interface Catalog {

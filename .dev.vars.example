@@ -1,0 +1,12 @@
+# Copy to .dev.vars for `wrangler pages dev`. Never commit the real file.
+SESSION_SECRET=change-me-to-32+-random-characters
+SITE_ORIGIN=http://localhost:8788
+ADMIN_EMAIL=you@example.com
+TAKEDOWN_EMAIL=takedown@your-domain.example
+EMAIL_FROM=Comic Gali <hello@your-domain.example>
+RESEND_API_KEY=
+TURNSTILE_SECRET=
+TURNSTILE_SITE_KEY=
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+IP_SALT=change-me
