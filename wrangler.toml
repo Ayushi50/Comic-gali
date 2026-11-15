@@ -15,3 +15,7 @@ migrations_dir = "migrations"
 # Non-secret vars go here; secrets via `wrangler pages secret put NAME`.
 [vars]
 SITE_ORIGIN = "https://comic-gali.pages.dev"
+ADMIN_EMAIL = "ayushipandey316@gmail.com"
+TAKEDOWN_EMAIL = "ayushipandey316@gmail.com"
+# Resend without a verified domain can only send from this address, and only to the Resend account owner's email.
+EMAIL_FROM = "Comic Gali <onboarding@resend.dev>"
