@@ -5,7 +5,7 @@ import { Cover } from '../components/Cover';
 import { Search } from '../components/Icons';
 import { useCatalog } from '../lib/data';
 import { LANG_NAMES, useI18n } from '../lib/i18n';
-import { getFavs, recentPositions } from '../lib/storage';
+import { recentPositions } from '../lib/storage';
 import { LANGS, type CatalogItem, type Lang, type Rights } from '../types';
 
 const RIGHTS: Rights[] = ['public_domain', 'open_license', 'creator_submitted', 'needs_license'];
@@ -16,12 +16,11 @@ export function Library() {
   const { items, ready, error } = useCatalog();
   const [sp, setSp] = useSearchParams();
   const [q, setQ] = useState('');
-  const f = sp.get('f') ?? 'all';
+  const f = sp.get('f') === 'comics' ? 'comics' : 'kahani';
   const [lang, setLang] = useState<Lang | ''>('');
   const [genre, setGenre] = useState('');
   const [age, setAge] = useState('');
   const [rights, setRights] = useState<Rights | ''>('');
-  const favs = getFavs();
   const last = recentPositions()[0];
   const lastItem = last && items.find((i) => i.id === last.id);
 
@@ -30,8 +29,7 @@ export function Library() {
     const text = [...Object.values(i.title), i.series, i.publisher, ...i.genres].join(' ').toLowerCase();
     if (q && !text.includes(q.trim().toLowerCase())) return false;
     if (f === 'comics' && i.status !== 'coming_soon') return false;
-    if ((f === 'kahani' || f === 'audio') && i.status !== 'available') return false;
-    if (f === 'fav' && !favs.includes(i.id)) return false;
+    if (f === 'kahani' && i.status !== 'available') return false;
     if (lang && !i.langs.includes(lang)) return false;
     if (genre && !i.genres.includes(genre)) return false;
     if (age && i.age !== age) return false;
@@ -41,7 +39,7 @@ export function Library() {
   const shown = items.filter(match);
   const now = shown.filter((i) => i.status === 'available');
   const soon = shown.filter((i) => i.status === 'coming_soon');
-  const chips: [string, string][] = [['all', t('f.all')], ['comics', t('f.comics')], ['kahani', t('f.kahani')], ['audio', t('f.audio')], ['fav', t('f.fav')]];
+  const chips: [string, string][] = [['kahani', t('f.kahani')], ['comics', t('f.comics')]];
 
   return (
     <div className="wrap">
@@ -54,7 +52,7 @@ export function Library() {
       </div>
       <div className="chips" role="group" aria-label="Filter">
         {chips.map(([id, label]) => (
-          <button key={id} type="button" className={`chip dhak${f === id ? ' on' : ''}`} aria-pressed={f === id} onClick={() => setSp(id === 'all' ? {} : { f: id })}>{label}</button>
+          <button key={id} type="button" className={`chip dhak${f === id ? ' on' : ''}`} aria-pressed={f === id} onClick={() => setSp(id === 'kahani' ? {} : { f: id })}>{label}</button>
         ))}
       </div>
       <div className="filters">

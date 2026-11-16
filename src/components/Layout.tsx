@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import { UI_LANGS, useI18n, type UiLang } from '../lib/i18n';
+import { API_ON, firstName, getMe, syncWithAccount } from '../lib/api';
 import { load, save } from '../lib/storage';
 import { onSoundChange, setSound, soundOn } from '../lib/sound';
 import { Moon, Mute, Speaker, Sun, Type } from './Icons';
@@ -48,6 +49,14 @@ export function Logo() {
 export function Layout() {
   const { t } = useI18n();
   const [user, setUser] = useState(() => load<string | null>('cg:user', null));
+  // After the emailed link / Google redirect the session cookie exists but localStorage does not: adopt the account name here.
+  useEffect(() => {
+    if (!API_ON) return;
+    void getMe().then(async (u) => {
+      if (u) { const n = firstName(u); if (load<string | null>('cg:user', null) !== n) { save('cg:user', n); setUser(n); await syncWithAccount(); } }
+      else if (load<string | null>('cg:user', null)) { save('cg:user', null); setUser(null); }
+    });
+  }, []);
   useEffect(() => { const f = () => setUser(load<string | null>('cg:user', null)); window.addEventListener('storage', f); return () => window.removeEventListener('storage', f); }, []);
   return (
     <>
@@ -55,13 +64,13 @@ export function Layout() {
       <header className="nav wrap">
         <Logo />
         <nav aria-label="Main">
-          <NavLink to="/library">{t('nav.comics')}</NavLink>
-          <NavLink to="/library?f=kahani">{t('nav.kahani')}</NavLink>
+          <NavLink to="/library?f=comics">{t('nav.comics')}</NavLink>
+          <NavLink to="/library">{t('nav.kahani')}</NavLink>
           <NavLink to="/submit">{t('nav.submit')}</NavLink>
         </nav>
         <div className="nav-r">
           <Controls />
-          <Link to="/signin" className="pri sm">{user ? user : t('signin')}</Link>
+          <Link to="/signin" className="pri sm">{user ? user.split(/\s+/)[0] : t('signin')}</Link>
         </div>
       </header>
       <main id="main"><Outlet /></main>

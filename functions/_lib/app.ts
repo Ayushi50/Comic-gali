@@ -61,7 +61,7 @@ const route = (method: string, path: string, h: Handler) => routes.push([method,
 route('GET', '/api/config', async ({ env }) => json({
   takedownEmail: env.TAKEDOWN_EMAIL ?? null, turnstileSiteKey: env.TURNSTILE_SITE_KEY ?? null,
   google: !!env.GOOGLE_CLIENT_ID, magicLink: !!(env.RESEND_API_KEY && env.EMAIL_FROM),
-}, 200, { 'cache-control': 'public, max-age=300' }));
+}, 200, { 'cache-control': 'public, max-age=60' }));
 
 // ---------- auth ----------
 route('POST', '/api/auth/magic', async ({ req, env, d }) => {
@@ -159,7 +159,7 @@ route('GET', '/api/media/(pub|sub|rec)/(.+)', async ({ env, url, m }) => {
   const key = `${m[1]}/${m[2]}`;
   if (m[1] === 'sub' && !(await verifyUrl(env.SESSION_SECRET, url.pathname, url.searchParams.get('exp'), url.searchParams.get('sig')))) throw new HttpError(403, 'Link expired');
   const o = await bucketOf(env).get(key); if (!o) throw new HttpError(404, 'Not found');
-  return new Response(o.body as BodyInit, { headers: { 'content-type': o.httpMetadata?.contentType ?? 'application/octet-stream', 'cache-control': m[1] === 'sub' ? 'private, max-age=300' : 'public, max-age=31536000, immutable', ...SECURITY_HEADERS, 'content-security-policy': "default-src 'none'; sandbox" } });
+  return new Response(o.body as BodyInit, { headers: { 'content-type': o.httpMetadata?.contentType ?? 'application/octet-stream', 'cache-control': m[1] === 'sub' ? 'private, max-age=60' : 'public, max-age=60', ...SECURITY_HEADERS, 'content-security-policy': "default-src 'none'; sandbox" } });
 });
 
 // ---------- submissions ----------

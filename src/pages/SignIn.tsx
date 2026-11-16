@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { API_ON, ApiError, api, apiUrl, getMe, syncWithAccount, useConfig } from '../lib/api';
+import { API_ON, ApiError, api, apiUrl, firstName, getMe, syncWithAccount, useConfig } from '../lib/api';
 import { Controls, Logo } from '../components/Layout';
 import { Cover } from '../components/Cover';
 import { useI18n } from '../lib/i18n';
@@ -24,7 +24,7 @@ export function SignIn() {
   // Already signed in (returned from the email link or Google): remember the name locally, merge local data, go on.
   useEffect(() => {
     if (!API_ON) return;
-    void getMe().then(async (u) => { if (u) { save('cg:user', u.name || u.email.split('@')[0]); await syncWithAccount(); nav('/library'); } });
+    void getMe().then(async (u) => { if (u) { save('cg:user', firstName(u)); await syncWithAccount(); nav('/library'); } });
   }, [nav]);
   return (
     <div className="signin">

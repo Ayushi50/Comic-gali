@@ -19,3 +19,4 @@ ADMIN_EMAIL = "ayushipandey316@gmail.com"
 TAKEDOWN_EMAIL = "ayushipandey316@gmail.com"
 # Resend without a verified domain can only send from this address, and only to the Resend account owner's email.
 EMAIL_FROM = "Comic Gali <onboarding@resend.dev>"
+TURNSTILE_SITE_KEY = "0x4AAAAAAGDQPVCMwu032c93"

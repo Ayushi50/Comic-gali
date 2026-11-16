@@ -23,6 +23,8 @@ export const loadConfig = () => (cfgP ??= API_ON ? api<Config>('/api/config').ca
 export function useConfig() { const [c, setC] = useState<Config | null>(null); useEffect(() => { void loadConfig().then(setC); }, []); return c; }
 
 export const getMe = () => (API_ON ? api<{ user: Me | null }>('/api/auth/me').then((r) => r.user).catch(() => null) : Promise.resolve(null));
+/** First name for display: first word of the name, or the part of the email before the @. */
+export const firstName = (u: { name: string | null; email: string }) => u.name?.trim().split(/\s+/)[0] || u.email.split('@')[0];
 export function useMe() {
   const [me, setMe] = useState<Me | null>(null); const [ready, setReady] = useState(!API_ON);
   useEffect(() => { let on = true; void getMe().then((u) => { if (on) { setMe(u); setReady(true); } }); return () => { on = false; }; }, []);
