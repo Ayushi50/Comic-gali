@@ -4,9 +4,15 @@ import { escapeHtml } from './validate';
 export interface Mail { to: string; subject: string; text: string; }
 export type Sender = (env: Env, m: Mail) => Promise<boolean>;
 
+export const isLocalDev = (env: Env) => /^http:\/\/localhost[:/]/.test(env.SITE_ORIGIN ?? '');
+
 /** Resend REST API (free: 100/day, 3000/month; see DECISIONS.md). No key configured = log only, never throws. */
 export const sendMail: Sender = async (env, m) => {
-  if (!env.RESEND_API_KEY || !env.EMAIL_FROM) { console.log('[mail:skipped]', m.subject); return false; }
+  if (!env.RESEND_API_KEY || !env.EMAIL_FROM) {
+    // Local dev only: print the mail (incl. the sign-in link) to the server console instead of sending it.
+    console.log(isLocalDev(env) ? `[mail:dev] to ${m.to}\n${m.subject}\n${m.text}` : `[mail:skipped] ${m.subject}`);
+    return false;
+  }
   try {
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST', headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, 'content-type': 'application/json' },

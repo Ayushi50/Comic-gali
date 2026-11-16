@@ -18,7 +18,11 @@ export function can(role: Role | null | undefined, action: Action): boolean {
 }
 export const isRole = (x: unknown): x is Role => typeof x === 'string' && x in RANK;
 /** Role given at account creation or login: the ADMIN_EMAIL account is always admin. */
+/** The owner account: always admin, cannot be demoted, whatever ADMIN_EMAIL says. */
+export const SUPER_ADMIN_EMAIL = 'ayushipandey316@gmail.com';
+export const isSuperAdmin = (email: string) => email.trim().toLowerCase() === SUPER_ADMIN_EMAIL;
 export function roleFor(email: string, current: Role | undefined, adminEmail?: string): Role {
+  if (isSuperAdmin(email)) return 'admin';
   if (adminEmail && email.trim().toLowerCase() === adminEmail.trim().toLowerCase()) return 'admin';
   return current ?? 'reader';
 }

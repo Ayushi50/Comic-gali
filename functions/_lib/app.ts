@@ -1,9 +1,9 @@
 import { audit, bucketOf, now, uid, type Env } from './db';
 import { randomToken, sha256, sign, signUrl, unsign, verifyUrl } from './crypto';
-import { sendMail, tpl, type Sender } from './email';
+import { isLocalDev, sendMail, tpl, type Sender } from './email';
 import { HttpError, assertSameOrigin, clientIp, cookie, corsHeaders, json, parseCookies, SECURITY_HEADERS } from './http';
 import { buildPublication } from './content';
-import { can, isRole, roleFor, type Action, type Role } from './perms';
+import { can, isRole, isSuperAdmin, roleFor, type Action, type Role } from './perms';
 import { dailyQuota, rateLimit } from './rate';
 import { LIMITS, clean, isEmail, slugify, sniffAudio, validatePages, validateSubmissionFields } from './validate';
 import type { Lang } from '../../src/types';
@@ -47,8 +47,8 @@ async function verifyTurnstile(env: Env, d: Deps, token: string | null, ip: stri
   if (!env.TURNSTILE_SECRET) return; // not configured: static/dev mode
   if (!token) throw new HttpError(400, 'Please complete the human check.');
   const r = await d.fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body: new URLSearchParams({ secret: env.TURNSTILE_SECRET, response: token, remoteip: ip }) });
-  const j = (await r.json().catch(() => ({}))) as { success?: boolean };
-  if (!j.success) throw new HttpError(400, 'Human check failed. Please try again.');
+  const j = (await r.json().catch(() => ({}))) as { success?: boolean; 'error-codes'?: string[] };
+  if (!j.success) { const codes = (j['error-codes'] ?? []).join(', '); console.error('turnstile failed', codes); throw new HttpError(400, `Human check failed${codes ? ` (${codes})` : ''}. Please try again.`); }
 }
 const ipHash = async (env: Env, req: Request) => sha256(`${env.IP_SALT ?? env.SESSION_SECRET}|${clientIp(req)}`);
 const num = (v: string | undefined, dflt: number) => (v && Number(v) > 0 ? Number(v) : dflt);
@@ -60,7 +60,7 @@ const route = (method: string, path: string, h: Handler) => routes.push([method,
 
 route('GET', '/api/config', async ({ env }) => json({
   takedownEmail: env.TAKEDOWN_EMAIL ?? null, turnstileSiteKey: env.TURNSTILE_SITE_KEY ?? null,
-  google: !!env.GOOGLE_CLIENT_ID, magicLink: !!(env.RESEND_API_KEY && env.EMAIL_FROM),
+  google: !!env.GOOGLE_CLIENT_ID, magicLink: !!(env.RESEND_API_KEY && env.EMAIL_FROM) || isLocalDev(env),
 }, 200, { 'cache-control': 'public, max-age=60' }));
 
 // ---------- auth ----------
@@ -73,7 +73,8 @@ route('POST', '/api/auth/magic', async ({ req, env, d }) => {
   const token = randomToken();
   await env.DB.prepare('INSERT INTO login_tokens (token_hash,email,expires_at) VALUES (?,?,?)').bind(await sha256(token), email, d.now() + 15 * 60_000).run();
   const link = `${env.SITE_ORIGIN.replace(/\/$/, '')}/api/auth/verify?token=${token}`;
-  await d.send(env, { to: email, ...tpl.magic(link) });
+  const sent = await d.send(env, { to: email, ...tpl.magic(link) });
+  if (!sent && !isLocalDev(env)) throw new HttpError(503, 'We could not send the sign-in email right now. Please try again later or use Google sign-in.');
   return json({ ok: true, message: 'If that address is valid, a sign-in link is on its way.' });
 });
 route('GET', '/api/auth/verify', async ({ env, url, d }) => {
@@ -247,9 +248,9 @@ route('POST', '/api/submissions/([0-9a-f-]{36})/(approve|reject)', async ({ req,
 route('POST', '/api/takedown', async ({ req, env, d }) => {
   await rateLimit(env, `takedown:${await ipHash(env, req)}`, 5, 3600, d.now());
   const b = (await req.json().catch(() => ({}))) as Record<string, string>;
-  await verifyTurnstile(env, d, b['cf-turnstile-response'] ?? null, clientIp(req));
   const name = clean(b.name, 80), email = clean(b.email, 254).toLowerCase(), reason = clean(b.reason, 3000, true), titleId = clean(b.title, 60) || null;
-  if (!name || !isEmail(email) || reason.length < 10) throw new HttpError(400, 'Please give your name, a valid email and a reason.');
+  if (!name || !isEmail(email) || reason.length < 10) throw new HttpError(400, 'Please give your name, a valid email and a reason (at least 10 characters).');
+  await verifyTurnstile(env, d, b['cf-turnstile-response'] ?? null, clientIp(req));
   const id = uid();
   await env.DB.prepare('INSERT INTO takedown_requests (id,title_id,name,email,reason,created_at) VALUES (?,?,?,?,?,?)').bind(id, titleId, name, email, reason, d.now()).run();
   await audit(env, null, 'takedown.create', id, { titleId });
@@ -313,12 +314,20 @@ route('GET', '/api/audit', async ({ env, user }) => {
   requireCan(user, 'audit.read');
   return json({ items: (await env.DB.prepare('SELECT * FROM audit_log ORDER BY id DESC LIMIT 200').all()).results });
 });
+route('GET', '/api/admin/users', async ({ env, user }) => {
+  requireCan(user, 'role.set');
+  const r = await env.DB.prepare('SELECT id,email,name,role,created_at FROM profiles ORDER BY created_at DESC LIMIT 500').all();
+  return json({ items: r.results });
+});
 route('POST', '/api/admin/role', async ({ req, env, user }) => {
   const u = requireCan(user, 'role.set');
   const b = (await req.json().catch(() => ({}))) as { email?: string; role?: string };
   if (!isRole(b.role) || !isEmail(clean(b.email, 254))) throw new HttpError(400, 'email and role required');
-  await env.DB.prepare('UPDATE profiles SET role=? WHERE email=?').bind(b.role, clean(b.email, 254).toLowerCase()).run();
-  await audit(env, u.id, 'role.set', b.email, { role: b.role });
+  const email = clean(b.email, 254).toLowerCase();
+  if (isSuperAdmin(email) && b.role !== 'admin') throw new HttpError(403, 'The owner account cannot be demoted');
+  if (email === u.email.toLowerCase() && b.role !== 'admin') throw new HttpError(403, 'You cannot demote yourself');
+  await env.DB.prepare('UPDATE profiles SET role=? WHERE email=?').bind(b.role, email).run();
+  await audit(env, u.id, 'role.set', email, { role: b.role });
   return json({ ok: true });
 });
 

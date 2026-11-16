@@ -8,7 +8,7 @@ interface Detail extends Row { email: string; panel_text: string; pages: string[
 interface Takedown { id: string; title_id: string | null; name: string; email: string; reason: string; status: string; created_at: number }
 
 /** Real moderation (API on). Every call is role-checked on the server; hiding the UI is only a courtesy. */
-function ApiModeration() {
+export function ApiModeration({ embedded = false }: { embedded?: boolean }) {
   const { me, ready } = useMe();
   const [rows, setRows] = useState<Row[]>([]); const [open, setOpen] = useState<Detail | null>(null);
   const [tds, setTds] = useState<Takedown[]>([]); const [err, setErr] = useState(''); const [reason, setReason] = useState('');
@@ -37,8 +37,8 @@ function ApiModeration() {
     catch (x) { setErr(x instanceof Error ? x.message : 'Failed'); }
   };
   return (
-    <div className="wrap" style={{ paddingBottom: 60 }}>
-      <div className="page-h"><h1>Moderation queue</h1></div>
+    <div className={embedded ? undefined : 'wrap'} style={{ paddingBottom: 60 }}>
+      {!embedded && <div className="page-h"><h1>Moderation queue</h1></div>}
       <p className="help">Signed in as {me.email} ({me.role}).</p>
       {err && <div role="status" className="help" style={{ fontWeight: 600 }}>{err}</div>}
       {!rows.length && <div className="empty">Nothing waiting.</div>}

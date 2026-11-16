@@ -55,3 +55,15 @@ if (API_ON && typeof window !== 'undefined') {
   let t: ReturnType<typeof setTimeout> | undefined;
   window.addEventListener('cg:pos', (e) => { const d = (e as CustomEvent<{ id: string; p: { index: number; lang: string; mode: string; dir: string } }>).detail; clearTimeout(t); t = setTimeout(() => pushPosition(d.id, d.p), 3000); });
 }
+
+/** Sign out everywhere on this device: server session, saved name and (with the API on) the account's cached favourites and positions, so the next person starts clean. */
+export async function signOut() {
+  if (API_ON) {
+    await api('/api/auth/logout', { method: 'POST' }).catch(() => undefined);
+    try {
+      for (const k of Object.keys(localStorage)) if (k === 'cg:favs' || k.startsWith('cg:pos:')) localStorage.removeItem(k);
+    } catch { /* ignore */ }
+  }
+  save('cg:user', null);
+  window.dispatchEvent(new Event('cg:signout'));
+}

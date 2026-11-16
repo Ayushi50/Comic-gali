@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Link, NavLink, Outlet } from 'react-router-dom';
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { UI_LANGS, useI18n, type UiLang } from '../lib/i18n';
-import { API_ON, firstName, getMe, syncWithAccount } from '../lib/api';
+import { API_ON, firstName, getMe, signOut, syncWithAccount } from '../lib/api';
 import { load, save } from '../lib/storage';
 import { onSoundChange, setSound, soundOn } from '../lib/sound';
-import { Moon, Mute, Speaker, Sun, Type } from './Icons';
+import { Moon, Mute, Speaker, Sun } from './Icons';
 
 export function useTheme() {
   const [theme, setTheme] = useState(() => document.documentElement.getAttribute('data-theme') ?? 'light');
@@ -20,14 +20,8 @@ export function useTheme() {
 export function Controls({ compact = false }: { compact?: boolean }) {
   const { t, ui, setUi } = useI18n();
   const { theme, toggle } = useTheme();
-  const [dys, setDys] = useState(() => load('cg:dys', false));
   const [snd, setSnd] = useState(soundOn());
   useEffect(() => onSoundChange(setSnd), []);
-  const toggleDys = () => {
-    const n = !dys; setDys(n); save('cg:dys', n);
-    document.documentElement.toggleAttribute('data-dys', n);
-    try { localStorage.setItem('cg-dys', n ? '1' : '0'); } catch { /* ignore */ }
-  };
   return (
     <>
       {!compact && (
@@ -35,7 +29,6 @@ export function Controls({ compact = false }: { compact?: boolean }) {
           {UI_LANGS.map((l) => <option key={l.id} value={l.id}>{l.label}</option>)}
         </select>
       )}
-      <button className="rnd dhak" type="button" aria-pressed={dys} aria-label={t('dys')} title={t('dys')} onClick={toggleDys}><Type /></button>
       <button className="rnd dhak" type="button" aria-pressed={snd} aria-label={t('sound')} title={t('sound')} onClick={() => setSound(!snd)}>{snd ? <Speaker /> : <Mute />}</button>
       <button className="rnd dhak" type="button" aria-label={t('theme')} title={t('theme')} onClick={toggle}>{theme === 'dark' ? <Sun /> : <Moon />}</button>
     </>
@@ -48,6 +41,7 @@ export function Logo() {
 
 export function Layout() {
   const { t } = useI18n();
+  const nav = useNavigate();
   const [user, setUser] = useState(() => load<string | null>('cg:user', null));
   // After the emailed link / Google redirect the session cookie exists but localStorage does not: adopt the account name here.
   useEffect(() => {
@@ -58,6 +52,8 @@ export function Layout() {
     });
   }, []);
   useEffect(() => { const f = () => setUser(load<string | null>('cg:user', null)); window.addEventListener('storage', f); return () => window.removeEventListener('storage', f); }, []);
+  useEffect(() => { const f = () => setUser(null); window.addEventListener('cg:signout', f); return () => window.removeEventListener('cg:signout', f); }, []);
+  const logout = async () => { await signOut(); nav('/'); };
   return (
     <>
       <a href="#main" className="skip">Skip to content</a>
@@ -70,7 +66,10 @@ export function Layout() {
         </nav>
         <div className="nav-r">
           <Controls />
-          <Link to="/signin" className="pri sm">{user ? user.split(/\s+/)[0] : t('signin')}</Link>
+          {user ? <>
+            <Link to="/account" className="pri sm">{user.split(/\s+/)[0]}</Link>
+            <button type="button" className="sec sm" onClick={logout}>{t('signout')}</button>
+          </> : <Link to="/signin" className="pri sm">{t('signin')}</Link>}
         </div>
       </header>
       <main id="main"><Outlet /></main>

@@ -17,7 +17,7 @@ export default function Submit() {
   const [files, setFiles] = useState<File[]>([]);
   const [done, setDone] = useState(false);
   const [err, setErr] = useState('');
-  const [ts, setTs] = useState('');
+  const [ts, setTs] = useState(''); const [tsKey, setTsKey] = useState(0);
   const [busy, setBusy] = useState(false);
   const cfg = useConfig();
   const CONSENT = 'I created this work (or hold the rights to it), I choose the licence above, and I agree that Comic Gali may display it and read it aloud with text-to-speech.';
@@ -31,7 +31,7 @@ export default function Submit() {
       if (API_ON) await submitToApi({ ...f, consent: String(f.consent), consentText: CONSENT }, files, ts);
       else await addSubmission({ id: crypto.randomUUID(), title: f.title, creator: f.creator, email: f.email, lang: f.lang, license: f.license, panelText: f.panelText, files, status: 'pending', at: Date.now() });
       setDone(true);
-    } catch (x) { setErr(x instanceof Error && API_ON ? x.message : 'Could not save the submission in this browser.'); }
+    } catch (x) { setErr(x instanceof Error && API_ON ? x.message : 'Could not save the submission in this browser.'); setTs(''); setTsKey((k) => k + 1); /* a Turnstile token works once */ }
     setBusy(false);
   };
   if (done) return <div className="wrap"><div className="empty">Thank you — your work is in the moderation queue.{API_ON ? ' We emailed you a receipt.' : <> <Link to="/moderation" className="lnk ul">See the queue</Link></>}</div></div>;
@@ -50,7 +50,7 @@ export default function Submit() {
         <div><label className="lbl" htmlFor="s6">Panel text (optional, makes it listenable)</label><textarea id="s6" className="inp" value={f.panelText} onChange={(e) => setF({ ...f, panelText: e.target.value })} placeholder={'Page 1, panel 1\nNarrator: One evening in the lane…\nRiya: Let’s fly kites!'} /><div className="help">One line per balloon as “Speaker: text”. Leave a blank line between panels.</div></div>
         <div><label className="lbl" htmlFor="s7">Licence</label><select id="s7" className="inp" value={f.license} onChange={(e) => setF({ ...f, license: e.target.value })}>{LICENSES.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select></div>
         <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}><input type="checkbox" required checked={f.consent} onChange={(e) => setF({ ...f, consent: e.target.checked })} style={{ marginTop: 4 }} /><span>{CONSENT}</span></label>
-        <Turnstile siteKey={API_ON ? cfg?.turnstileSiteKey : null} onToken={setTs} />
+        <Turnstile key={tsKey} siteKey={API_ON ? cfg?.turnstileSiteKey : null} onToken={setTs} />
         {err && <div role="alert" style={{ color: 'var(--c2)', fontWeight: 600 }}>{err}</div>}
         <div><button className="pri dhak" type="submit" disabled={busy}>Send for review</button></div>
       </form>

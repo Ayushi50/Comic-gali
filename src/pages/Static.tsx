@@ -16,7 +16,7 @@ export function Static({ page }: { page: 'takedown' | 'sources' | '404' }) {
   const [sent, setSent] = useState(false);
   const cfg = useConfig();
   const TAKEDOWN_EMAIL = cfg?.takedownEmail || BUILD_TAKEDOWN_EMAIL;
-  const [ts, setTs] = useState(''); const [err, setErr] = useState('');
+  const [ts, setTs] = useState(''); const [tsKey, setTsKey] = useState(0); const [err, setErr] = useState('');
   const [form, setForm] = useState({ title: sp.get('title') ?? '', name: '', email: '', reason: '', good: false });
 
   if (page === '404') return <div className="wrap"><div className="empty">{t('nf')} <Link to="/" className="lnk ul">Home</Link></div></div>;
@@ -26,7 +26,7 @@ export function Static({ page }: { page: 'takedown' | 'sources' | '404' }) {
       e.preventDefault(); setErr('');
       if (API_ON) {
         try { await api('/api/takedown', { method: 'POST', body: JSON.stringify({ ...form, 'cf-turnstile-response': ts }) }); setSent(true); }
-        catch (x) { setErr(x instanceof ApiError ? x.message : 'Could not send. Please email us instead.'); }
+        catch (x) { setErr(x instanceof ApiError ? x.message : 'Could not send. Please email us instead.'); setTs(''); setTsKey((k) => k + 1); /* a Turnstile token works once */ }
         return;
       }
       save('cg:takedowns', [...load<unknown[]>('cg:takedowns', []), { ...form, at: new Date().toISOString() }]);
@@ -50,7 +50,7 @@ export function Static({ page }: { page: 'takedown' | 'sources' | '404' }) {
                 <div><label className="lbl" htmlFor="te">Email</label><input id="te" className="inp" type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div></div>
               <div><label className="lbl" htmlFor="tr">What is the problem?</label><textarea id="tr" className="inp" required value={form.reason} onChange={(e) => setForm({ ...form, reason: e.target.value })} /></div>
               <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}><input type="checkbox" required checked={form.good} onChange={(e) => setForm({ ...form, good: e.target.checked })} style={{ marginTop: 4 }} /><span>I am the rights holder, or authorised to act for them, and the information above is accurate.</span></label>
-              <Turnstile siteKey={API_ON ? cfg?.turnstileSiteKey : null} onToken={setTs} />
+              <Turnstile key={tsKey} siteKey={API_ON ? cfg?.turnstileSiteKey : null} onToken={setTs} />
               {err && <div role="alert" style={{ color: 'var(--c2)', fontWeight: 600 }}>{err}</div>}
               <div><button className="pri dhak" type="submit">Send request</button></div>
             </form>
