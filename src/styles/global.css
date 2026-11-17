@@ -109,11 +109,11 @@ label.lbl{display:block;font-size:14px;font-weight:600;margin-bottom:8px}
 .is-playing .reel{animation:spin 2.6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .playbtn{width:64px;height:64px;border-radius:50%;border:2px solid var(--ink);background:var(--paper);color:var(--ink);cursor:pointer;display:grid;place-items:center;flex:none}
-.rowl{display:flex;align-items:baseline;gap:28px;flex-wrap:wrap;padding:26px 12px;border-bottom:1.5px solid var(--hair);transition:background .2s,padding .2s}
+.rowl{display:flex;align-items:baseline;gap:28px;flex-wrap:wrap;padding:18px 12px;border-bottom:1.5px solid var(--hair);transition:background .2s,padding .2s}
 .rowl:hover{background:var(--soft);padding-left:24px}
 .rowl .n{font-size:13px;font-weight:600;letter-spacing:.14em;color:var(--muted);width:36px}
-.rowl .t{flex:1 1 300px;font-family:var(--serif);font-weight:600;font-size:clamp(28px,3.6vw,48px);line-height:1.1;letter-spacing:-.01em}
-.rowl .d{font-family:var(--serif);font-style:italic;font-size:22px;color:var(--muted)}
+.rowl .t{flex:1 1 300px;font-family:var(--serif);font-weight:600;font-size:clamp(22px,2.6vw,34px);line-height:1.15;letter-spacing:-.01em}
+.rowl .d{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--muted)}
 .band{border-radius:24px;background:var(--c1);color:var(--on1);padding:clamp(28px,5vw,64px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:48px}
 .band .q{position:relative;background:var(--paper);color:var(--ink);border-radius:32px;padding:clamp(24px,3vw,40px) clamp(24px,3.4vw,48px);font-family:var(--serif);font-style:italic;font-weight:600;font-size:clamp(26px,4vw,54px);line-height:1.15}
 .band .q svg{position:absolute;left:56px;bottom:-34px}

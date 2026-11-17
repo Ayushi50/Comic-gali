@@ -91,7 +91,7 @@ export function Home() {
       </section>
 
       <section className="wrap sect" id="kahani">
-        <h2 className="h2" style={{ paddingBottom: 20, borderBottom: '1.5px solid var(--fg)' }}>{t('home.kahaniyan')}</h2>
+        <h2 className="h2 sm" style={{ paddingBottom: 16, borderBottom: '1.5px solid var(--fg)' }}>{t('home.kahaniyan')}</h2>
         {avail.map((i, n) => (
           <Link key={i.id} to={`/title/${i.id}`} className="rowl">
             <span className="n">{String(n + 1).padStart(2, '0')}</span>
